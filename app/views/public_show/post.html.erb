@@ -1,0 +1,9 @@
+<div id="topic">
+    <%= render :partial => "public_show/topic_template/fv_normal", locals:{topic: @post} %>
+    <% if @post.movie_url.present? %>
+        <div class="yt-wrapper">
+            <%= movie_url_trim(@post.movie_url) %>
+        </div>
+    <% end %>
+    <%= render :partial => "public_show/topic_template/rich_content", locals:{content: @content} %>
+</div>

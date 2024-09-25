@@ -1,0 +1,15 @@
+<div class="admin_info_area">
+    <%= link_to '<< カテゴリーに戻る' , topic_category_index_path(partner_id: @partner.id), class: "back_link" %>
+    <div class="label_area">
+        <div class="page_title">
+            <%= @partner.name %>：<%= @topic_category.name %>
+        </div>
+        <% if !(@topic_category.content_type == "汎用（単一コンテンツ）" && @topic_category.topics.present?) %>
+            <div class="add_button_area">
+                <%= link_to 'コンテンツを追加' , topic_new_path(topic_category_id: @topic_category.id), class: "btn btn-outline-primary" %>
+            </div>
+        <% end %>
+    </div>
+</div>
+
+<%= render :partial => "admin_partial/index/index" %>

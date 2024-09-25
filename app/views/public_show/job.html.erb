@@ -1,0 +1,150 @@
+<div id="job_show_new">
+    <div class="subscript" style="color:<%=@partner.main_color%>;">
+        Job Information
+    </div>
+    <div class="partner_name">
+        <%= @partner.name %>
+    </div>
+    <div class="page_title">
+        <%= @job.title %>
+    </div>
+    <div class="tag_block">
+        <% @job.label.split(",").each do | label | %>
+            <div class="tag" style="color:<%=@partner.main_color%>;">#<%= label %></div>
+        <% end %>
+    </div>
+
+    <% if !@job.movie_url.blank? %>
+        <div class="yt-wrapper">
+            <%= movie_url_trim(@job.movie_url) %>
+        </div>
+    <% end %>
+
+    <div class="job_overview">
+        <% @job_overview.each do | obj | %>
+            <% if obj[1].present? %>
+                <div class="item" style="border-left:solid 7px <%=@partner.main_color%>">
+                    <%= obj[0] %>
+                </div>
+                <div class="content">
+                    <%= br_text_code_ok(obj[1]) %>
+                </div>
+            <% end %>
+        <% end %>
+    </div>
+
+    <div class="job_detail">
+        <div class="job_detail_index">
+            募集要項
+        </div>
+        <div class="job_detail_row_wrap">
+            <% @job_detail.each do | obj | %>
+                <% if obj[1].present? %>
+                    <div class="job_detail_row">
+                        <div class="job_detail_head">
+                            <b><%= obj[0] %></b>
+                        </div>
+                        <div class="job_detail_data">
+                            <%= br_text_code_ok(obj[1]) %>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+
+
+        <div class="job_detail_index">
+            会社概要
+        </div>
+        <div class="job_detail_row_wrap">
+            <% @partner_info.each do | obj | %>
+                <% if obj[1].present? %>
+                    <div class="job_detail_row">
+                        <div class="job_detail_head">
+                            <b><%= obj[0] %></b>
+                        </div>
+                        <div class="job_detail_data">
+                            <%= br_text_code_ok(obj[1]) %>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+
+        </div>
+    </div>
+
+    <div class="entry_btn_bottom_area">
+        <a href="/<%= @partner.url %>/entry?job_id=<%= @job.id %>" class="btn entry_btn" style="background-color:<%=@partner.main_color%>;border: solid 2px <%=@partner.main_color%>;" onMouseOut="this.style.color='white';this.style.backgroundColor='<%=@partner.main_color%>'" onMouseOver="this.style.color='<%=@partner.main_color%>';this.style.backgroundColor='white'"><span><i class="fas fa-envelope mr-1"></i>エントリー</span></a>
+    </div>
+
+
+</div>
+
+
+<script type="application/ld+json"> 
+{
+  "@context" : "http://schema.org/",
+  "@type" : "JobPosting",
+  
+  "datePosted" : "<%= l(@job.updated_at,format: :date_for_google) %>",
+  "validThrough" : "<%= l(@job.updated_at.since(30.days),format: :date_for_google) %>",
+
+  "title" : "<%= @job.title %>",
+  "description" : "<%= @job.main_content %>",
+
+  <% if @job.emp_status == "正社員" %>
+    "employmentType" : "FULL_TIME",
+  <% elsif @job.emp_status == "契約社員" %>
+    "employmentType" : "CONTRACTOR",
+  <% elsif @job.emp_status == "パート・アルバイト" %>
+    "employmentType" : "PART_TIME",
+  <% elsif @job.emp_status == "派遣社員" %>
+    "employmentType" : "TEMPORARY",
+  <% else %>
+    "employmentType" : "OTHER",
+  <% end %>
+
+  "hiringOrganization" : {
+    "@type" : "Organization",
+    "name" : "<%= @job.partner.name %>"
+  },
+
+  "jobLocation" : {
+    "@type" : "Place",
+    "address" : {
+      "@type" : "PostalAddress",
+      "streetAddress" : "<%= @job.street %>",
+      "addressLocality" : "<%= @job.city %>",
+      "addressRegion" : "<%= @job.pref %>",
+      "addressCountry": "JP"
+    }
+  },
+  
+  "baseSalary": {
+    "@type": "MonetaryAmount",
+    "currency": "JPY",
+    "value": {
+      "@type": "QuantitativeValue",
+        <% if !@job.min_income.blank? && !@job.max_income.blank? %>
+            "minValue": <%= @job.min_income %>,
+            "maxValue": <%= @job.max_income %>,
+        <% elsif !@job.min_income.blank? %>
+            "value": <%= @job.min_income %>,
+        <% elsif !@job.max_income.blank? %>
+            "value": <%= @job.max_income %>,
+        <% end %>
+        <% if @job.income_style == "年収" %>
+            "unitText": "YEAR"
+        <% elsif @job.income_style == "月収" || @job.income_style == "日給月給" %>
+            "unitText": "MONTH"
+        <% elsif @job.income_style == "日給" %>
+            "unitText": "DAY"
+        <% elsif @job.income_style == "時給" %>
+            "unitText": "HOUR"
+        <% else %>
+            "unitText": ""
+        <% end %>
+    }
+  }
+}
+</script>

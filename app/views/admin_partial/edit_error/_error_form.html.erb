@@ -1,0 +1,23 @@
+<% if item.errors.any? %>
+    <input type="checkbox" id="pop-up"">
+    <div class="edit_error">
+        <div class="window alert-danger">
+            <label class="close" for="pop-up">×</label>
+            <p class="text">保存出来ませんでした。</p>
+        </div>
+    </div>
+    <div class="alert alert-danger" role="alert">
+        <strong>入力内容にエラーがあります</strong>
+        <ul>
+            <% item.errors.each do |error| %>
+                <li><%= error.message %></li>
+            <% end %>
+        </ul>
+    </div>
+<% elsif item.errors.blank? %>
+    <input type="checkbox" id="pop-up"">
+    <div class="edit_success alert-success">
+        <label class="close" for="pop-up">×</label>
+        <p class="text">保存に成功しました。</p>
+    </div>
+<% end %>

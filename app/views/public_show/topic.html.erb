@@ -1,0 +1,30 @@
+<div id="topic">
+
+    <div class="category_area">
+        <% if @topic.topic_category.subscript.present? %>
+            <div class="subscript">
+                <%= @topic.topic_category.subscript %>
+            </div>
+        <% end %>
+        <div class="page_title" style="color:<%=@partner.main_color%>;">
+            <%= @topic.topic_category.name %>
+        </div>
+    </div>
+
+    <!--ファーストビューエリア-->
+    <%= render :partial => "public_show/topic_template/fv_normal", locals:{topic: @topic} %>
+    <% if @topic.movie_url.present? %>
+        <div class="yt-wrapper">
+            <%= movie_url_trim(@topic.movie_url) %>
+        </div>
+    <% end %>
+    <%= render :partial => "public_show/topic_template/rich_content", locals:{content: @content} %>
+
+    <% if ["汎用（複数コンテンツ）"].include?(@topic.topic_category.content_type) %>
+        <% if Topic.where(topic_category_id: @topic.topic_category.id).where.not(id: @topic.id).where(disclose_flg: 1).exists? %>
+            <div class="content_wrap">
+                <%= render :partial => "public_show/top_template/card", locals:{partner: @partner, category: @topic.topic_category, topics: Topic.where(topic_category_id: @topic.topic_category.id).where.not(id: @topic.id).where(disclose_flg: 1)} %>
+            </div>
+        <% end %>
+    <% end %>
+</div>

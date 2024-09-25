@@ -1,0 +1,14 @@
+
+<% if flash[:notice] || flash[:danger] || flash[:warning] %>
+    <div id="notice" style="margin-bottom:2rem;">
+        <% if flash[:notice] %>
+            <div class="alert alert-info" role="alert"><%= flash[:notice].gsub(/[\r\n]/, "<br>").html_safe %></div>
+        <% end %>
+        <% if flash[:danger] %>
+            <div class="alert alert-danger" role="alert"><%= flash[:danger].gsub(/[\r\n]/, "<br>").html_safe %></div>
+        <% end %>
+        <% if flash[:warning] %>
+            <div class="alert alert-warning" role="alert"><%= flash[:warning].gsub(/[\r\n]/, "<br>").html_safe %></div>
+        <% end %>
+    </div>
+<% end %>

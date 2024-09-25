@@ -1,0 +1,25 @@
+<% if !@errortext.nil? %>
+    <div class="alert alert-danger" role="alert">
+        <strong>入力内容にエラーがあります。<br>下記のデータは更新・作成されていません。</strong>
+        <table class="table-strong">
+            <tbody>
+                <% @errortext.each do |key, value| %>
+                <tr>
+                    <th class="w-15"><%= key %>行目データ</th>
+                    <td>
+                        <ui>
+                        <% value.each do |item| %>
+                            <li><%= item %></li>
+                        <% end %>
+                        </ui>
+                    </td>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+<% end %>
+
+<div class="fluid-container border-top mb-0 pt-2 pb-2 text-center fixed-bottom bg-dark">
+    <%= link_to '前に戻る', :back ,class:"btn btn-info w-25" %>
+</div>

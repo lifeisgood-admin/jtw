@@ -1,0 +1,17 @@
+ja:
+  views:
+    pagination:
+      first: "&laquo; 最初"
+      last: "最後 &raquo;"
+      previous: "&lsaquo; 前"
+      next: "次 &rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "<b>該当データがありません。</b>"
+          one: '<b class = "h4 text-danger">1件</b> (1～1件を表示中)'
+          other: '<b class = "h4 text-danger">%{count}件</b> (%{count}件を表示中)'
+      more_pages:
+        display_entries: '<b class = "h4 text-danger">%{total}件</b> (%{first}～%{last}件を表示中)'

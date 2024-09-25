@@ -1,0 +1,58 @@
+<div class="content_block clearfix for_card_block" id="category_<%=category.id.to_s%>">
+    <div class="text_block">
+        <% if category.subscript.present? %>
+            <div class="subscript">
+                <%= category.subscript %>
+            </div>
+        <% end %>
+        <div class="category_name" style="color:<%=@partner.main_color%>;">
+            <%= category.name %>
+        </div>
+        <% if category.description.present? %>
+            <div class="description">
+                <%= category.description %>
+            </div>
+        <% end %>
+    </div>
+
+    
+    <div class="card_area">
+        <% topics.each do |obj| %>
+            <%= link_to topic_path(partner_url: partner.url, topic_category_id: category.id, topic_id: obj.id), class:"", style:"" do %>
+                <div class="card_wrap" onMouseOut="this.style.color='initial';" onMouseOver="this.style.color='<%=partner.main_color%>'">
+                    <%= image_tag(obj.main_image.variant( gravity: "center", resize: "300x300^", crop: "300x300+0+0" ).processed, class:'') %>
+                    <div class="title">
+                        <%= obj.title %>
+                    </div>
+                </div>
+            <% end %>
+        <% end %>
+    </div>
+    <script type="text/javascript">
+        $(function() {
+            $('.card_area').slick({
+                autoplay: true, //自動再生
+                autoplaySpeed: 100000,
+                infinite: true, //スライドのループ有効化
+                dots: false, //ドットのナビゲーションを表示
+                slidesToShow: 4, //表示するスライドの数
+                slidesToScroll: 4, //スクロールで切り替わるスライドの数
+                responsive: [
+                    {
+                        breakpoint: 1024, //ブレークポイントが480px
+                        settings: {
+                            slidesToShow: 2, //表示するスライドの数
+                            slidesToScroll: 2, //スクロールで切り替わるスライドの数
+                        }
+                    },{
+                        breakpoint: 599, //ブレークポイントが480px
+                        settings: {
+                            slidesToShow: 1, //表示するスライドの数
+                            slidesToScroll: 1, //スクロールで切り替わるスライドの数
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+</div>

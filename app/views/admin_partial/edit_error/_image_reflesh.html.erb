@@ -1,0 +1,21 @@
+<div class="post_row">
+    <div class="post_index col-md-3">
+        <p><b><%=name%><% if del_id.blank? %><span class="text-danger">（必須）</span><% end %></b></p>
+    </div>
+    <div class="post_field col-md-9">
+        <input type="file" name="<%=model_name%>[<%=image_name%>]" id="<%=model_name%>_<%=image_name%>"><br>
+    </div>
+</div>
+<% if image.attached? && !image.id.nil? %>
+    <p style="margin:0;">現在登録されている画像<% if del_id.present? %>（削除するものはチェックしてください）<% end %></p>
+    <label>
+        <% if del_id.present? %>
+            <input type="checkbox" value="<%= image.id.to_s %>" name="<%=model_name%>[<%=del_id%>][]">
+        <% end %>
+        <% if image_name == "main_image" %>
+            <%= image_tag(image.variant( gravity: "center", resize: "600" ).processed, class:'mr-5') %>
+        <% else %>
+            <%= image_tag(image.variant( gravity: "center", resize: "300" ).processed, class:'mr-5') %>
+        <% end %>
+    </label>
+<% end %>

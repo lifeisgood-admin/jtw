@@ -1,0 +1,256 @@
+body {
+    overflow-x: hidden;
+    // font-family: 'Roboto Slab', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+body,
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+footer {
+  margin-top: auto;
+}
+
+.pc {display: block !important;; }
+.sp {display: none !important;; }
+  
+@media screen and (max-width: 1024px) {
+    .pc {display: none !important;; }
+    .sp {display: block !important;; }
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: 700;
+    // font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.min-font{
+    font-size:0.8rem;
+}
+
+a {
+    color:#004085;
+}  
+
+/* 幅の指定------------------------- */
+.w-3{
+    width: 3%;
+}
+.w-5{
+    width: 5%;
+}
+.w-7{
+    width: 7%;
+}
+.w-10{
+    width: 10%;
+}
+.w-15{
+    width: 15%;
+}
+.w-20{
+    width: 20%;
+}
+.w-25{
+    width: 25%;
+}
+.w-30{
+    width: 30%;
+}
+.w-40{
+    width: 40%;
+}
+.w-50{
+    width: 50%;
+}
+.w-90{
+    width: 90% !important;
+}
+.w-70{
+    width: 70%;
+}
+.w-80{
+    width: 80%;
+}
+
+
+.btn {
+    font-weight: 700;
+}
+  
+
+/* sideNavi------------------------- */
+.viewer .btnPrev,
+.viewer .btnNext {
+    margin-top: -25px;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    z-index: 101;
+}
+.viewer .btnPrev {
+    left: 10px;
+    background: #ccc url(../img/btnPrev.jpg) no-repeat center center;
+}
+.viewer .btnNext {
+    right: 10px;
+    background: #ccc url(../img/btnNext.jpg) no-repeat center center;
+}
+
+
+/* =======================================
+    ClearFixElements
+======================================= */
+.viewer ul:after {
+    content: ".";
+    height: 0;
+    clear: both;
+    display: block;
+    visibility: hidden;
+}
+
+.viewer ul {
+    display: inline-block;
+    overflow: hidden;
+}
+
+
+/* SNSシェアボタン------------------------- */
+.snssharer {
+    margin: 10px 0 20px 0;
+    display: flex;
+    justify-content: center;
+    .sns_element {
+        font-size: 2.5rem;
+        margin: 0 .7rem;
+        .facebook {
+            color: #3c5a99;
+        }
+        .twitter {
+            color: #28aae1;
+        }
+        .line {
+            color: #01ba01;
+        }    
+    }
+}
+.snssharer:after {
+    content: "";
+    clear: both;
+    display: block;
+    height: 0;
+}
+
+
+
+/* 画像の大きさ固定------------------------- */
+.image_200_300_cover{
+    width: 100%;
+    padding-bottom: 66.666%;
+    height: 0;
+    position:relative;
+    overflow:hidden;
+    img{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition:1s all;
+        &:hover {
+            transform:scale(1.2,1.2);
+            transition:1s all;
+        }
+    }
+    .no_hover:hover {
+        transform:none;
+    }
+}
+
+.image_200_300_contain{
+    width: 100%;
+    padding-bottom: 66.666%;
+    height: 0;
+    position:relative;
+    overflow:hidden;
+    img{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition:1s all;
+        &:hover {
+            transform:scale(1.2,1.2);
+            transition:1s all;
+        }
+    }
+    .no_hover:hover {
+        transform:none;
+    }
+}
+
+/* エントリーボタン------------------------- */
+
+/* エントリーボタン-------------------------canvus用 */
+.entry_btn {
+    color: white;
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 5rem !important;
+    background-color: orange;/*色変更対応済み*/
+    border: 2px solid orange;/*色変更対応済み*/
+    &:hover {
+        color: orange;/*色変更対応済み*/
+        background-color: white;/*色変更対応済み*/
+        transition: all .3s;
+    }
+}
+
+.entry_btn_bottom_area {
+    text-align: center;
+    margin: .5rem 0 1.5rem 0;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+    .entry_btn {
+        font-size: 1.2rem;
+        padding: .7rem;
+        width: 30%;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .entry_btn_bottom_area {
+        .entry_btn {
+            width: 45%;
+        }
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .entry_btn_bottom_area {
+        .entry_btn {
+            width: 60%;
+        }
+    }
+}
+
+
+/* ページネーションの表示 ------------------ */
+.tac {
+    text-align: center;
+    padding: 2rem 0;
+}  
+.pagenatecenter{
+    display: inline-block;
+    *display:inline;
+    zoom:1;
+}
+  

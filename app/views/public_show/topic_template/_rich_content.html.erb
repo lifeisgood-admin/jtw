@@ -1,0 +1,43 @@
+
+<div id="rich_content">
+    <% count = 1 %>
+    <% content.each_with_index do |obj, i| %>
+        <% if obj[0].present? || obj[1].present? || obj[2] == true || obj[6].present? %>
+            <div class="content_block clearfix <% if (obj[2] == true || obj[6].present?) && obj[4].in?(["bottom"]) %>d-flex flex-column-reverse<% end %>">
+                <% if obj[2] == true || obj[6].present? %>
+                    <div class="<% if obj[4].in?(["left"]) %>float-md-left content_image_half_width<% elsif obj[4].in?(["","right"]) %>float-md-right content_image_half_width<% else %>content_image_full_width<% end %> content_image">
+                        <% if obj[6].present? %>
+                            <div class="yt-wrapper">
+                                <%= movie_url_trim(obj[6]) %>
+                            </div>
+                        <% else %>
+                            <%= image_tag(obj[3].variant( gravity: "center", resize: "600" ).processed, class:'w-100', alt:"#{obj[5]}") %>
+                        <% end %>
+                    </div>
+                <% end %>
+                <% if obj[0].present? || obj[1].present? %>
+                    <div class="content <% if (obj[2] == true || obj[6].present?) && obj[4].in?(["left"]) %>float-md-left content_text_half_width<% elsif obj[4].in?(["","right"]) %>float-md-right content_text_half_width<% else %>content_text_full_width<% end %> <% if @topic.present? && @topic.index_type == "数字" %>number<% end %> <% if @topic.present? && @topic.index_type == "QA" %>question<% end %>">
+                        <% if @topic.present? %>
+                            <% if @topic.index_type == "数字" %>
+                                <div class="index" style="color:<%=@company.main_color%>;">0<%=count%></div>
+                            <% elsif @topic.index_type == "QA" %>
+                                <div class="index">Q<%=count%></div>
+                            <% end %>
+                        <% end %>
+                        <div class="text_area">
+                            <% if obj[0].present? %>
+                                <div class="text_head"><%= br_text(obj[0]) %></div>
+                            <% end %>
+                            <% if obj[1].present? %>
+                                <div class="text_body">
+                                    <%= br_text(obj[1]) %>
+                                </div>
+                            <% end %>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+            <% count += 1 %>
+        <% end %>
+    <% end %>
+</div>

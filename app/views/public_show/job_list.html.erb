@@ -1,0 +1,57 @@
+<div class="content_block clearfix" id="jobs">
+    <div class="job_area">
+        <div class="job_card_area">
+            <% if @jobs.size == 0 %>
+                <p class="no_jobs">現在、募集中の求人はありません。</p>
+            <% else %>
+                <% @jobs.each do |obj| %>
+                    <div class="job_card_wrap" onMouseOut="this.style.border='1.5px solid #cccccc';" onMouseOver="this.style.border='1.5px solid <%=@partner.main_color%>'">
+                        <div class="title">
+                            <%= obj.title %>
+                        </div>
+                        <div class="label_area">
+                            <% obj.label.split(",").each do | label | %>
+                                <span class="label" style="color:<%=@partner.main_color%>;border: solid 1px <%=@partner.main_color%>;"><%= label %></span>
+                            <% end %>
+                        </div>
+                        <div class="job_content">
+                            <%= obj.main_content.truncate(40) %>
+                        </div>
+                        <div class="footer">
+                            <div class="salary">
+                                <% if obj.max_income.present? %>
+                                    ～<%= obj.income_style %>
+                                    <% if obj.max_income.to_i >= 10000 %>
+                                        <span class="income">
+                                            <%= (obj.max_income.to_i/10000).to_s(:delimited) %>
+                                        </span>万円
+                                    <% else %>
+                                        <span class="income">
+                                            <%= obj.max_income.to_s(:delimited) %>
+                                        </span>円
+                                    <% end %>
+                                <% elsif obj.min_income.present? %>
+                                    <%= obj.income_style %>
+                                    <% if obj.min_income.to_i >= 10000 %>
+                                        <span class="income">
+                                            <%= (obj.min_income.to_i/10000).to_s(:delimited) %>
+                                        </span>万円～
+                                    <% else %>
+                                        <span class="income">
+                                            <%= obj.min_income.to_s(:delimited) %>
+                                        </span>円～
+                                    <% end %>
+                                <% end %>
+                            </div>
+                            <div class="link_for_job">
+                                <%= link_to job_path(partner_url: @partner.url, job_id: obj.id), class:"", style:"" do %>
+                                    詳しく見る >
+                                <% end %>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</div>

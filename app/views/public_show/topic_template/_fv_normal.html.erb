@@ -1,0 +1,13 @@
+<div class="topic_first_view_area normal">
+    <div class="topic_image_block">
+        <%= image_tag(topic.main_image.variant( gravity: "center", resize: "1000x400^", crop: "1000x400+0+0" ).processed, class:'') %>
+    </div>
+    <div class="topic_text_block">
+        <div class="topic_title">
+            <%= topic.title %>
+        </div>
+        <div class="topic_description">
+            <%= safe_join(topic.description.split("\n"), tag(:br)) %>
+        </div>
+    </div>
+</div>

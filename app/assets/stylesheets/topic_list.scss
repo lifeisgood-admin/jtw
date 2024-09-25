@@ -1,0 +1,100 @@
+#topic_list {
+    width: 60%;
+    margin: auto;
+    .content_block {
+        padding: 2rem;
+        border: 1.5px solid rgb(204, 204, 204);
+        border-radius: 1.5rem;
+        margin: 2rem 0;
+        &:hover {
+            transition: all .3s;    
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        a {
+            color:inherit;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        .text_block {
+            &.for_image_left {
+                padding: 0 1rem 0 2.5rem;
+            }
+            &.for_image_right {
+                padding: 0 2.5rem 0 1rem;
+            }
+            .topic_title {
+                font-size: 1.7rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+            }
+            .topic_description {
+            }
+        }
+        .image_block {
+            padding: 0;
+            img {
+                width: 100%;
+                border-radius: 1.5rem;
+            }
+        }
+    }
+}
+@media screen and (max-width: 1024px) {
+    #topic_list {
+        width: 80%;
+        .content_block {
+            &:hover {
+            }
+            a {
+                &:hover {
+                }
+            }
+            .text_block {
+                &.for_image_left {
+                }
+                &.for_image_right {
+                }
+                .topic_title {
+                }
+                .topic_description {
+                }
+            }
+            .image_block {
+                img {
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 768px) {
+    #topic_list {
+        width: 90%;
+        .content_block {
+            padding: 1rem;
+            &:hover {
+            }
+            a {
+                &:hover {
+                }
+            }
+            .text_block {
+                &.for_image_left {
+                    padding: 0;
+                }
+                &.for_image_right {
+                    padding: 0;
+                }
+                .topic_title {
+                    font-size: 1.3rem;
+                }
+                .topic_description {
+                }
+            }
+            .image_block {
+                img {
+                }
+            }
+        }
+    }
+}

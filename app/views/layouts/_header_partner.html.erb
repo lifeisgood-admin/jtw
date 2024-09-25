@@ -1,0 +1,51 @@
+<div id="header_partner">
+    <div class="gnav_partner" id="gnav_partner">
+        <input type="checkbox" id="menu_bar">
+        <div class="menu_wrap">
+            <div class="menu">
+                <div class="logo_area">
+                    <%= link_to partner_top_path(partner_url: @partner.url) do %>
+                        <span class="partner_name" style="color:<%=@partner.main_color%>;">
+                            <%= @partner.name %>
+                        </span>
+                    <% end %>
+                </div>
+            </div>
+            <label for="menu_bar" class="menu-btn">
+                <span></span>
+            </label>
+        </div>
+        <ul id ="links">
+            <% @menu.each do |menu| %>
+                <li class="nav_item <% if menu[2].size >=2 %>drop_down<% end %>" onMouseLeave="this.style.color='black';this.style.fontWeight='normal';" onMouseEnter="this.style.color='<%=@partner.main_color%>';this.style.fontWeight='700';">
+                    <% if menu[1] == "job" %>
+                        <%= link_to job_index_view_path do %><%= menu[0] %><% end %>
+                    <% else %>
+                        <% if menu[2].size == 1 %>
+                            <% menu[2].each do |obj| %>
+                                <% if obj.topics.size == 1 %>
+                                    <%= link_to topic_path(topic_category_id: obj.id, topic_id: obj.topics.first.id) do %><%= menu[0] %><% end %>
+                                <% else %>
+                                    <%= link_to topic_list_path(topic_category_id: obj.id) do %><%= menu[0] %><% end %>
+                                <% end %>
+                            <% end %>
+                        <% else %>
+                            <a><%= menu[0] %><i class="fas fa-angle-down" style="margin:0.3rem;color:<%=@partner.main_color%>"></i></a>
+                            <ul class="dropdown__lists">
+                                <% menu[2].each do |obj| %>
+                                    <li onMouseLeave="this.style.backgroundColor='#f2f2f2';this.style.color='<%=@partner.main_color%>';" onMouseEnter="this.style.color='white';this.style.backgroundColor='<%=@partner.main_color%>';">
+                                        <% if obj.topics.size == 1 %>
+                                            <%= link_to topic_path(topic_category_id: obj.id, topic_id: obj.topics.first.id) do %><%= obj.name %><% end %>
+                                        <% else %>
+                                            <%= link_to topic_list_path(topic_category_id: obj.id) do %><%= obj.name %><% end %>
+                                        <% end %>
+                                    </li>
+                                <% end %>
+                            </ul>
+                        <% end %>
+                    <% end %>
+                </li>
+            <% end %>
+        </ul>
+    </div>
+</div>

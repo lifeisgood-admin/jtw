@@ -1,0 +1,180 @@
+#job_show_new {
+    width: 70%;
+    margin: auto;
+    padding: 100px 0;
+    .subscript {
+        margin: 2rem 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    .partner_name {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: .3rem 0;
+    }
+    .page_title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+    .tag_block {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5rem;
+        .tag {
+            font-size: 1rem;
+            font-weight: 700;
+            color: orange;/*色変更対応済み*/
+            margin: 0 .7rem;
+        }
+    }
+    .job_overview {
+        width: 80%;
+        margin: auto;
+        .item {
+            font-size: 2rem;
+            font-weight: 700;
+            border-left: solid 7px orange;/*色変更対応済み*/
+            padding-left: .6rem;
+            line-height: 2rem;
+            margin: 2rem 0;
+        }
+        .content {
+            margin: 0 1rem 5rem 1rem;
+        }
+    }
+    .job_detail{
+        .job_detail_index{
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 1rem 1rem 1rem 3rem;
+        }
+        .job_detail_row_wrap{
+            margin-bottom: 5rem;
+            border-top: 1px #cdcdcd solid;
+            .job_detail_row{
+                align-items: center;
+                font-size: 1rem;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                border-bottom: 1px #cdcdcd solid;
+                .job_detail_head{
+                    text-align: center;
+                    width: 25%;
+                    padding: 1.5rem .25rem;
+                }
+                .job_detail_data{
+                    width: 75%;
+                    padding: 1.5rem;
+                }
+            }
+            .job_feature_block {
+                display: flex;
+                flex-wrap: wrap;
+                width: 90%;
+                margin: 1.5rem auto;
+                .job_feature {
+                    margin: .3rem;
+                    border: solid 2px gray;
+                    padding: .2rem .5rem;
+                    border-radius: .3rem;
+                    color: #434343;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    #job_show_new {
+        width: 90%;
+        .subscript {
+        }
+        .partner_name {
+        }
+        .page_title {
+            font-size: 2rem;
+        }
+        .tag_block {
+            .tag {
+            }
+        }
+        .job_overview {
+            width: 90%;
+            .item {
+            }
+            .content {
+            }
+        }
+        .job_detail{
+            .job_detail_index{
+            }
+            .job_detail_row_wrap{
+                .job_detail_row{
+                    .job_detail_head{
+                    }
+                    .job_detail_data{
+                    }
+                }
+                .job_feature_block {
+                    .job_feature {
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 599px) {
+    #job_show_new {
+        .subscript {
+        }
+        .partner_name {
+        }
+        .page_title {
+        }
+        .tag_block {
+            .tag {
+            }
+        }
+        .job_overview {
+            width: 100%;
+            .item {
+            }
+            .content {
+            }
+        }
+        .job_detail{
+            .job_detail_index{
+                padding: 1rem 0;
+            }
+            .job_detail_row_wrap{
+                border: none;
+                .job_detail_row{
+                    border: none;
+                    display: block;
+                    .job_detail_head{
+                        padding: .5rem;
+                        font-size: 1.3rem;
+                        text-align: left;
+                        width: 100%;
+                        background-color: #f3f3f3;
+                    }
+                    .job_detail_data{
+                        width: 100%;
+                        padding: .5rem .5rem 2rem .5rem;
+                    }
+                }
+                .job_feature_block {
+                    width: 100%;
+                    .job_feature {
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+
+<div id="topic_list">
+    <% if @topic_category.subscript.present? %>
+        <div class="subscript" style="color:<%=@partner.main_color%>;">
+            <%= @topic_category.subscript %>
+        </div>
+    <% end %>
+    <div class="page_title">
+        <%= @topic_category.name %>
+    </div>
+    <% @topics.each_with_index do |obj, i| %>
+        <div class="content_block clearfix" onMouseOut="this.style.border='1.5px solid #cccccc';" onMouseOver="this.style.border='1.5px solid <%=@partner.main_color%>'">
+            <%= link_to topic_path(topic_category_id: @topic_category.id, topic_id: obj.id), class:"", style:"" do %>
+                <div class="text_block col-md-6 <% if i % 2 == 1 %>for_image_right float-left<% else %>for_image_left float-right<% end %>">
+                    <div class="topic_title">
+                        <%= obj.title %>
+                    </div>
+                    <% if obj.description.present? %>
+                        <div class="topic_description">
+                            <%= br_text(obj.description) %>
+                        </div>
+                    <% end %>
+                    <div class="link_area">
+                        <span class="link_for_detail sample5-3" style="color:<%=@partner.main_color%>;" onMouseOut="this.style.borderBottom='solid 2px transparent';this.children[0].style.backgroundColor='<%=@partner.main_color%>';this.children[1].style.borderTop='solid 2px white';this.children[1].style.borderRight='solid 2px white'" onMouseOver="this.style.borderBottom='solid 2px <%=@partner.main_color%>';this.children[0].style.backgroundColor='white';this.children[1].style.borderTop='solid 2px <%=@partner.main_color%>';this.children[1].style.borderRight='solid 2px <%=@partner.main_color%>'" href="<%= topic_path(topic_category_id: @topic_category.id, topic_id: obj.id) %>">
+                            詳しく見る
+                            <div class="circle_arrow_outer" style="background:<%=@partner.main_color%>;border: 2px solid <%=@partner.main_color%>;"></div>
+                            <div class="circle_arrow_inner" onMouseOver="this.style.borderTop='solid 2px <%=@partner.main_color%>';this.style.borderRight='solid 2px <%=@partner.main_color%>'"></div>
+                        </span>
+                    </div>
+                </div>
+                <div class="image_block col-md-6 <% if i % 2 == 1 %>float-left<% else %>float-right<% end %>">
+                    <%= image_tag(obj.main_image.variant( gravity: "center", resize: "900x600^", crop: "900x600+0+0" ).processed, class:'') %>
+                </div>
+            <% end %>
+        </div>
+    <% end %>
+</div>

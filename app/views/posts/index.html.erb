@@ -1,0 +1,13 @@
+<div class="admin_info_area">
+    <%= link_to '<< パートナー一覧に戻る' , partner_index_path(partner_id: @partner.id), class: "back_link" %>
+    <div class="label_area">
+        <div class="page_title">
+            <%= @partner.name %>：ポスト一覧
+        </div>
+        <div class="add_button_area">
+            <%= link_to 'ポストを追加' , post_new_path(partner_id: @partner.id), class: "btn btn-outline-primary" %>
+        </div>
+    </div>
+</div>
+
+<%= render :partial => "admin_partial/index/index" %>

@@ -1,0 +1,48 @@
+.category_area {
+}
+.subscript{
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: orange;/*色変更対応済み*/
+}
+.category_name {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+.description {
+}
+.page_title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 1024px) {
+    .category_area {
+    }
+    .subscript{
+    }
+    .category_name {
+        font-size: 2.5rem;
+    }
+    .description {
+    }
+    .page_title {
+        font-size: 2rem;
+    }
+}
+@media screen and (max-width: 768px) {
+    .category_area {
+        text-align: center;
+    }
+    .subscript{
+    }
+    .category_name {
+        font-size: 2rem;
+    }
+    .description {
+    }
+    .page_title {
+    }
+}

@@ -1,0 +1,53 @@
+<div class="admin_table">
+    <div class="table_row view_only_pc">
+        <% @data[0].each do | set | %>
+            <% if set[3] == "true" && !current_user.admin_flg? %>
+                <% next %>
+            <% end %>
+            <div class="table_item w-<%= set[2].to_s %> order-md-<%= set[1].to_s %>">
+                <div class="table_head_pc"><span><%= set[0] %></span></div>
+            </div>
+        <% end %>
+    </div>
+    <% @data.drop(1).each_with_index do |obj, i| %>
+        <div id="destroy_<%= obj[1][0] %>">
+            <input type="checkbox" id="admin_menu_bar_<%= i.to_s %>" class="admin_menu_bar">
+            <div class="table_row">
+                <% obj.each_with_index do |elem, j| %>
+                    <% if @data[0][j][3] == "true" && !current_user.admin_flg? %>
+                        <% next %>
+                    <% end %>
+                    <div class="table_item w-<%= @data[0][j][2].to_s %> order-md-<%= @data[0][j][1].to_s %> <% if @data[0][j][4] == "true" %>sp_menu<% end %>">
+                        <div class="table_head_sp"><span><%= @data[0][j][0] %></span></div>
+                        <div class="table_record">
+                            <% if elem[0] == "公開" %>
+                                <span id="publish_<%= obj[1][0] %>">
+                                    <%= render :partial => "admin_partial/publish_button/publish_button", locals:{flg: elem[1], path: elem[2], confirm: @confirm} %>
+                                </span>
+                            <% else %>
+                                <span>
+                                    <% if elem[3].present? %>
+                                        <a href="<%= elem[3] %>" <% if elem[4] == "blank" %>target="_blank" rel="noopener"<% elsif elem[4] == "remote_destroy" %>data-remote="true" data-confirm="削除しますか？"<% end %> class="<% if elem[1] == "btn" %>btn btn-sm<% end %> <%= elem[2] %>">
+                                            <% if elem[0] == "プレビュー" %>
+                                                <i class="fas fa-search"></i>
+                                            <% else %>
+                                                <%= elem[0] %>
+                                            <% end %>
+                                        </a>
+                                    <% else %>
+                                        <%= elem[0] %>
+                                    <% end %>
+                                </span>
+                            <% end %>
+                            <% if @data[0][j][4] == "true" %>
+                                <label for="admin_menu_bar_<%= i.to_s %>" class="menu-btn">
+                                    <span></span>
+                                </label>
+                            <% end %>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    <% end %>
+</div>

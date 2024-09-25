@@ -1,0 +1,40 @@
+$('#alert').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/error_form", locals:{item: @item}) %>");
+
+<% if @rich_content %>
+    $('#image_area1').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像１", image: @item.content_image1, image_name: "content_image1", del_id: "content_image1_del_id"}) %>");
+    $('#image_area2').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像２", image: @item.content_image2, image_name: "content_image2", del_id: "content_image2_del_id"}) %>");
+    $('#image_area3').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像３", image: @item.content_image3, image_name: "content_image3", del_id: "content_image3_del_id"}) %>");
+    $('#image_area4').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像４", image: @item.content_image4, image_name: "content_image4", del_id: "content_image4_del_id"}) %>");
+    $('#image_area5').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像５", image: @item.content_image5, image_name: "content_image5", del_id: "content_image5_del_id"}) %>");
+    $('#image_area6').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像６", image: @item.content_image6, image_name: "content_image6", del_id: "content_image6_del_id"}) %>");
+    $('#image_area7').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像７", image: @item.content_image7, image_name: "content_image7", del_id: "content_image7_del_id"}) %>");
+    $('#image_area8').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "添付画像８", image: @item.content_image8, image_name: "content_image8", del_id: "content_image8_del_id"}) %>");
+<% end %>
+
+<% if @thumbnail %>
+    $('#thumbnail_area').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "サムネイル", image: @item.thumbnail, image_name: "thumbnail", del_id: @thumbnail_del_id}) %>");
+<% end %>
+
+<% if @main_image %>
+    $('#main_image_area').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "メインビジュアル", image: @item.main_image, image_name: "main_image", del_id: @main_image_del_id}) %>");
+<% end %>
+
+<% if @logo %>
+    $('#logo_area').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "ロゴ", image: @item.logo, image_name: "logo", del_id: @logo_del_id}) %>");
+<% end %>
+
+<% if @map_image %>
+    $('#map_image_area').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "地図画像", image: @item.map_image, image_name: "map_image", del_id: @map_image_del_id}) %>");
+<% end %>
+
+<% if @face_photo %>
+    $('#face_photo_area').html("<%= escape_javascript(render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: @model_name, name: "証明写真", image: @item.face_photo, image_name: "face_photo", del_id: @face_photo_del_id}) %>");
+<% end %>
+
+<% if @path %>
+    $('#preview_btn').html("<%= escape_javascript(link_to 'プレビュー', @path , target: :_blank, rel: :noopener ,class:"btn btn-success w-25") %>");
+<% end %>
+
+<% if @sms_record %>
+    $('#sms_record').html("<%= escape_javascript(render :partial => "applicants/sms_record", locals:{applicant: @applicant}) %>");
+<% end %>

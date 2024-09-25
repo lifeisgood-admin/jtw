@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% if @page_title.present? %>
+            <title><%= @page_title %></title>
+        <% end %>
+        <% if @page_description.present? %>
+            <meta name="description" content="<%= @page_description %>">
+        <% end %>
+
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <%= csrf_meta_tags %>
+        <%= csp_meta_tag %>
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+        <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+        <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    
+    </head>
+
+    <body>
+        <%= render :partial => "layouts/header_partner" %>
+
+        <div style="<% if @lp.blank? %>padding-top: 100px;<% end %>">
+            <%= yield %>
+        </div>
+        
+        <%= render :partial => "layouts/footer" %>
+    </body>
+</html>

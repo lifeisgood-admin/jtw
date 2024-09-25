@@ -1,0 +1,9 @@
+<% if flg == 1 %>
+    <% if confirm.present? %>
+        <%= link_to '公開中', path, remote: true, method: :get, data: { confirm: confirm }, class: "btn btn-sm btn-primary" %>
+    <% else %>
+        <%= link_to '公開中', path, remote: true, method: :get, class: "btn btn-sm btn-primary" %>
+    <% end %>
+<% else %>
+    <%= link_to '非公開', path, remote: true, method: :get, class: "btn btn-sm btn-secondary" %>
+<% end %>

@@ -1,0 +1,136 @@
+<div id="partner_top">
+    <div class="main_visual">
+        <div class="image_area">
+                <% if @partner.main_image_position == "center" %>
+                    <div class="image image_position">
+                        <%= image_tag(@partner.main_image.variant( gravity: "center", resize: "1024x400^", crop: "1024x400+0+0" ).processed, class:'no_hover main_image_center') %>
+                    </div>
+                <% elsif @partner.main_image_position == "right" %>
+                    <div class="image image_position">
+                        <%= image_tag(@partner.main_image.variant( gravity: "center", resize: "1024x400^", crop: "1024x400+0+0" ).processed, class:'no_hover main_image_right') %>
+                    </div>
+                <% elsif @partner.main_image_position == "left" %>
+                    <div class="image image_position">
+                        <%= image_tag(@partner.main_image.variant( gravity: "center", resize: "1024x400^", crop: "1024x400+0+0" ).processed, class:'no_hover main_image_left') %>
+                    </div>
+                <% else %>
+                    <div class="image">
+                        <%= image_tag(@partner.main_image.variant( gravity: "center", resize: "1024x400^", crop: "1024x400+0+0" ).processed, class:'no_hover') %>
+                    </div>
+                <% end %>
+            <div class="catch_copy <% if @partner.catch_copy_position.blank? || @partner.catch_copy_position == "center" %>text-center<% elsif @partner.catch_copy_position == "right" %>text-right<% elsif @partner.catch_copy_position == "left" %>text-left<% end %>" style="color:<%=@partner.catch_copy_color%>;">
+                <%= @partner.catch_copy.gsub(/\R/, "<br>").html_safe %>
+            </div>
+        </div>
+    </div>
+
+    <div id="template_wrap">
+        <% @topic_categories.each do |obj| %>
+            <% case obj.display_style %>
+            <% when "求人" then %>
+                <%= render :partial => "public_show/top_template/job", locals:{partner: @partner, category: obj} %>
+            <% when "カード" then %>
+                <%= render :partial => "public_show/top_template/card", locals:{partner: @partner, category: obj, topics: obj.topics} %>
+            <% when "文章のみ" then %>
+                <%= render :partial => "public_show/top_template/text_obj", locals:{partner: @partner, category: obj, obj_position: "none"} %>
+            <% when "画像のみ" then %>
+                <%= render :partial => "public_show/top_template/text_obj", locals:{partner: @partner, category: obj, obj_position: "only", obj_type: "image"} %>
+            <% when "文章+画像" then %>
+                <%= render :partial => "public_show/top_template/text_obj", locals:{partner: @partner, category: obj, obj_position: "right", obj_type: "image"} %>
+            <% when "画像+文章" then %>
+                <%= render :partial => "public_show/top_template/text_obj", locals:{partner: @partner, category: obj, obj_position: "left", obj_type: "image"} %>
+            <% when "動画のみ" then %>
+                <%= render :partial => "public_show/top_template/text_obj", locals:{partner: @partner, category: obj, obj_position: "only", obj_type: "movie"} %>
+            <% when "文章+動画" then %>
+                <%= render :partial => "public_show/top_template/text_obj", locals:{partner: @partner, category: obj, obj_position: "right", obj_type: "movie"} %>
+            <% when "動画+文章" then %>
+                <%= render :partial => "public_show/top_template/text_obj", locals:{partner: @partner, category: obj, obj_position: "left", obj_type: "movie"} %>
+            <% end %>
+        <% end %>
+
+        <div class="content_block clearfix" id="partner_about">
+            <div class="text_block text-center">
+                <div class="subscript">
+                    Profile
+                </div>
+                <div class="category_name" style="color:<%=@partner.main_color%>;">
+                    プロフィール
+                </div>
+            </div>
+            <div class="partner_about_block">
+                <table class="">
+                    <tr>
+                        <th class="">名称</th>
+                        <td class=""><%= @partner.name %></td>
+                    </tr>
+
+                    <% if @partner.info1_item.present? && @partner.info1_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info1_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info1_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info2_item.present? && @partner.info2_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info2_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info2_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info3_item.present? && @partner.info3_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info3_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info3_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info4_item.present? && @partner.info4_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info4_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info4_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info5_item.present? && @partner.info5_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info5_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info5_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info6_item.present? && @partner.info6_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info6_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info6_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info7_item.present? && @partner.info7_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info7_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info7_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info8_item.present? && @partner.info8_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info8_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info8_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info9_item.present? && @partner.info9_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info9_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info9_content)) %></td>
+                        </tr>
+                    <% end %>
+                    <% if @partner.info10_item.present? && @partner.info10_content.present? %>
+                        <tr>
+                            <th class=""><%= @partner.info10_item %></th>
+                            <td class=""><%= br_text_code_ok(text_url_to_link(@partner.info10_content)) %></td>
+                        </tr>
+                    <% end %>
+                </table>
+                <% if @partner.map_url.present? %>
+                    <div class="map_area">
+                        <iframe src="<%= map_url_trim(@partner.map_url) %>" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

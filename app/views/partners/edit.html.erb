@@ -1,0 +1,300 @@
+<div class="admin_container_edit">
+    <h1>パートナー登録</h1>
+
+    <div id="alert">
+        <% if @alert %>
+            <%= render :partial => "admin_partial/edit_error/error_form", locals:{item: @partner} %>
+        <% end %>
+    </div>
+
+    <%= form_with(model: @partner, url:{action:"edit"} , local: false, multipart: true)  do |form| %>
+        <p class="h5 mt-5"><b>【基本項目】</b></p>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>名称<span class="text-danger">（必須）</span></b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :name, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <b>登録カテゴリー<span class="text-danger">（必須）</span></b>
+            </div>
+            <div class="post_field col-md-9">
+                <label><%= form.check_box  :category, {multiple: true,class: "", checked: @partner.category.try(:include?,"求人掲載")}, "求人掲載", nil %>求人掲載</label>
+                <label><%= form.check_box  :category, {multiple: true,class: "", checked: @partner.category.try(:include?,"福利厚生サービス提供")}, "福利厚生サービス提供", nil %>福利厚生サービス提供</label>
+                <label><%= form.check_box  :category, {multiple: true,class: "", checked: @partner.category.try(:include?,"教育機関")}, "教育機関", nil %>教育機関</label>
+                <label><%= form.check_box  :category, {multiple: true,class: "", checked: @partner.category.try(:include?,"事業パートナー募集")}, "事業パートナー募集", nil %>事業パートナー募集</label>
+                <label><%= form.check_box  :category, {multiple: true,class: "", checked: @partner.category.try(:include?,"助っ人")}, "助っ人", nil %>助っ人</label>
+                <label><%= form.check_box  :category, {multiple: true,class: "", checked: @partner.category.try(:include?,"仕事の専門家")}, "仕事の専門家", nil %>仕事の専門家</label>
+                <label><%= form.check_box  :category, {multiple: true,class: "", checked: @partner.category.try(:include?,"アンバサダー")}, "アンバサダー", nil %>アンバサダー</label>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>公開設定<span class="text-danger">（必須）</span></b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.select :disclose_flg,[["非公開","0"],["公開","1"]], {}, {class:"form-control"} %>
+            </div>
+        </div>
+        <div class="tooltip_bottom post_row">
+            <div class="post_index col-md-3">
+                <p class="w-90"><b>URL文字列<span class="text-danger">（必須）</span></b></p><span class="question_icon"><i class="far fa-question-circle"></i></span>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :url, { class:"form-control" } %>
+            </div>
+            <div class="tt_description">
+                URLとして使用される文字列を入力してください。他社で使用されているものは使用できません。
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <b>サイトメインカラー</b>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.color_field :main_color %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <b>プライバシーポリシー<span class="text-danger">（必須）</span></b>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :privacy_policy, {rows: 7, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="tooltip_bottom post_row">
+            <div class="post_index col-md-3">
+                <p class="w-90"><b>通知先MAIL<span class="text-danger">（必須）</span></b></p><span class="question_icon"><i class="far fa-question-circle"></i></span>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :mail, { class:"form-control" } %>
+            </div>
+            <div class="tt_description">
+                設定したメールアドレスに、全ての応募通知メールが届きます。複数指定したい場合は半角カンマ「,」区切りで入力してください。編集後は必ず応募テストを行い通知が届くことをご確認ください。
+            </div>
+        </div>
+        
+        <p class="h5 mt-5"><b>【サイト設定】</b></p>
+        <div id="thumbnail_area">
+            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "partner", name: "サムネイル", image: @partner.thumbnail, image_name: "thumbnail", del_id: ""} %>
+        </div>
+        <div class="tooltip_bottom post_row">
+            <div class="post_index col-md-3">
+                <p class="w-90"><b>ラベル</b></p>
+                <span class="question_icon"><i class="far fa-question-circle"></i></span>        
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :label, { class:"form-control" } %>
+            </div>
+            <div class="tt_description">
+                半角カンマ区切りで複数追加可能
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="d-flex align-items-start fc4 col-md-3 pt-1 pb-1 pt-sm-2 pb-sm-2 pr-1 pl-2 pl-sm-3 show-border" style="background-color:#D2E2F5">
+                <p class="mb-0"><b>googleマップURL</b><br>
+                <a href="https://www.google.co.jp/maps/?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得はこちらから</b></span></a><br>
+                <span class="min-font">1.自社の所在地住所を検索<br></span>
+                <span class="min-font">2.「共有」をクリック<br></span>
+                <span class="min-font">3.「地図を埋め込む」を選択<br></span>
+                <span class="min-font">4.「HTMLをコピー」をクリックし、枠内に貼り付け<br></span></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :map_url, {rows: 7, class:"form-control" } %>
+            </div>
+        </div>
+        
+        <p class="h5 mt-5"><b>プロフィール</b></p>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info1_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info1_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info2_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info2_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info3_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info3_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info4_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info4_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info5_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info5_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info6_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info6_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info7_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info7_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info8_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info8_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info9_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info9_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3 pr-0 pl-2">
+                <%= form.text_field :info10_item, { class:"form-control w-90" } %>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :info10_content, {rows: 3, class:"form-control" } %>
+            </div>
+        </div>
+
+        <p class="h5 mt-5"><b>【トップページファーストビュー設定】</b></p>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <b>画像表示</b>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.select :main_image_position, [["選択してください","center"],["中央寄せ","center"],["右寄せ","right"],["左寄せ","left"],["全体表示","all"]], {}, {class:"form-control"} %>
+            </div>
+        </div>
+        <div id="main_image_area">
+            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "partner", name: "メインビジュアル", image: @partner.main_image, image_name: "main_image", del_id: ""} %>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>キャッチコピー</b><br>
+                <span class="min-font">推奨文字数：25~30</span></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_area :catch_copy, {rows:3, class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <b>キャッチコピー配置</b>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.select :catch_copy_position, [["選択してください","center"],["中央","center"],["右","right"],["左","left"]], {}, {class:"form-control"} %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <b>キャッチコピーテキストカラー</b>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.color_field :catch_copy_color %>
+            </div>
+        </div>
+            
+        <p class="h5 mt-3"><b>【コンタクト設定】</b></p>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>MAIL</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_mail, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>電話番号</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_tel, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>Line</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_line, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>X</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_x, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>FaceBook</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_fb, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>Linkedin</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_linkedin, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>Instagram</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_insta, { class:"form-control" } %>
+            </div>
+        </div>
+        <div class="post_row">
+            <div class="post_index col-md-3">
+                <p><b>Mail</b></p>
+            </div>
+            <div class="post_field col-md-9">
+                <%= form.text_field :contact_mail, { class:"form-control" } %>
+            </div>
+        </div>
+
+        <%= render :partial => "admin_partial/edit_button/edit_button", locals:{form: form, path: @path} %>
+
+    <% end %>
+</div>
