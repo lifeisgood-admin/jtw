@@ -3,7 +3,7 @@
 
     <div id="alert">
         <% if @alert %>
-            <%= render :partial => "admin_partial/edit_error/error_form", locals:{item: @topic_category} %>
+            <%= render :partial => "admin_partial/edit/error_form", locals:{item: @topic_category} %>
         <% end %>
     </div>
 
@@ -142,11 +142,11 @@
         <div class="image_area" style="">
             <p class="h5 mt-3"><b>【画像】</b></p>
             <div id="thumbnail_area">
-                <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "topic_category", name: "サムネイル", image: @topic_category.thumbnail, image_name: "thumbnail", del_id: ""} %>
+                <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "topic_category", name: "サムネイル", image: @topic_category.thumbnail, image_name: "thumbnail", del_id: ""} %>
             </div>
         </div>
 
-        <%= render :partial => "admin_partial/edit_button/edit_button", locals:{form: form, path: @path} %>
+        <%= render :partial => "admin_partial/edit/edit_button", locals:{form: form, path: @path} %>
         
     <% end %>
 </div>

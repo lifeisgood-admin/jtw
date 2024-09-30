@@ -88,7 +88,7 @@ class PartnersController < ApplicationController
         @main_image = true
         @main_image_del_id = ""
         @alert = true
-        render "admin_partial/edit_error/edit_error"
+        render "admin_partial/edit/edit_error"
       }
     end
   end

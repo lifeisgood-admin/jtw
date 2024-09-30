@@ -3,7 +3,7 @@
 
     <div id="alert">
         <% if @alert %>
-            <%= render :partial => "admin_partial/edit_error/error_form", locals:{item: @user} %>
+            <%= render :partial => "admin_partial/edit/error_form", locals:{item: @user} %>
         <% end %>
     </div>
 
@@ -59,7 +59,7 @@
             </div>
         </div>
     
-        <%= render :partial => "admin_partial/edit_button/edit_button", locals:{form: form, path: @path} %>
+        <%= render :partial => "admin_partial/edit/edit_button", locals:{form: form, path: @path} %>
         
     <% end %>
 </div>

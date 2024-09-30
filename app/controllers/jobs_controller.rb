@@ -37,6 +37,10 @@ class JobsController < ApplicationController
   def edit
     @partner = Partner.find(params[:partner_id])
 
+    @form_create[]
+    @form_create.push({column:"partner_id"},{index:"会社名"},{required:true},[{type:"hidden_field"},{value:@partner.id},{display:@partner.name}])
+
+
     # @job_index_categories = JobIndexCategory.all
     # @location_index_categories = LocationIndexCategory.all
     # @feature_index_categories = FeatureIndexCategory.all
@@ -89,7 +93,7 @@ class JobsController < ApplicationController
         @item = @job
         @model_name = "job"
         @alert = true
-        render "admin_partial/edit_error/edit_error"
+        render "admin_partial/edit/edit_error"
       }
     end
   end

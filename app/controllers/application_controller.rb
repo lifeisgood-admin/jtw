@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
 
         respond_to do |format|
             format.js
-            render "admin_partial/publish_button/publish"
+            render "admin_partial/publish/publish"
         end
     end
 

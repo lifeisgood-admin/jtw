@@ -107,7 +107,7 @@ class PostsController < ApplicationController
         @rich_content = true
         @main_image = true
         @main_image_del_id = ""
-        render "admin_partial/edit_error/edit_error"
+        render "admin_partial/edit/edit_error"
       }
     end
   end

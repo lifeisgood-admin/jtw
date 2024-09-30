@@ -1,0 +1,5 @@
+$('#notice').html("<%= escape_javascript(render :partial => "layouts/admin_flash") %>");
+
+<% if @info_flg.blank? %>
+    $('#publish_<%= @publish_item.id %>').html("<%= escape_javascript(render :partial => "admin_partial/publish/publish_button", locals:{flg: @publish_item.disclose_flg, path: @publish_path, confirm: @confirm}) %>");
+<% end %>

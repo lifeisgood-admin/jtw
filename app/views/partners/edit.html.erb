@@ -3,7 +3,7 @@
 
     <div id="alert">
         <% if @alert %>
-            <%= render :partial => "admin_partial/edit_error/error_form", locals:{item: @partner} %>
+            <%= render :partial => "admin_partial/edit/error_form", locals:{item: @partner} %>
         <% end %>
     </div>
 
@@ -80,7 +80,7 @@
         
         <p class="h5 mt-5"><b>【サイト設定】</b></p>
         <div id="thumbnail_area">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "partner", name: "サムネイル", image: @partner.thumbnail, image_name: "thumbnail", del_id: ""} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "partner", name: "サムネイル", image: @partner.thumbnail, image_name: "thumbnail", del_id: ""} %>
         </div>
         <div class="tooltip_bottom post_row">
             <div class="post_index col-md-3">
@@ -200,7 +200,7 @@
             </div>
         </div>
         <div id="main_image_area">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "partner", name: "メインビジュアル", image: @partner.main_image, image_name: "main_image", del_id: ""} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "partner", name: "メインビジュアル", image: @partner.main_image, image_name: "main_image", del_id: ""} %>
         </div>
         <div class="post_row">
             <div class="post_index col-md-3">
@@ -294,7 +294,7 @@
             </div>
         </div>
 
-        <%= render :partial => "admin_partial/edit_button/edit_button", locals:{form: form, path: @path} %>
+        <%= render :partial => "admin_partial/edit/edit_button", locals:{form: form, path: @path} %>
 
     <% end %>
 </div>

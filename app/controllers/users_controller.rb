@@ -57,7 +57,7 @@ class UsersController < ApplicationController
       format.js {
         @item = @user
         @alert = true
-        render "admin_partial/edit_error/edit_error"
+        render "admin_partial/edit/edit_error"
       }
     end
   end

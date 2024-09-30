@@ -3,7 +3,7 @@
 
     <div id="alert">
         <% if @alert %>
-            <%= render :partial => "admin_partial/edit_error/error_form", locals:{item: @post} %>
+            <%= render :partial => "admin_partial/edit/error_form", locals:{item: @post} %>
         <% end %>
     </div>
 
@@ -37,7 +37,7 @@
 
         <p class="h5 mt-3"><b>【画像】</b></p>
         <div id="main_image_area">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "メインビジュアル", image: @post.main_image, image_name: "main_image", del_id: ""} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "メインビジュアル", image: @post.main_image, image_name: "main_image", del_id: ""} %>
         </div>
         
         <p class="h5 mt-3"><b>【動画】</b></p>
@@ -135,7 +135,7 @@
             </div>
         </div>
         <div id="image_area1">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像１", image: @post.content_image1, image_name: "content_image1", del_id: "content_image1_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像１", image: @post.content_image1, image_name: "content_image1", del_id: "content_image1_del_id"} %>
         </div>
         
         
@@ -191,7 +191,7 @@
             </div>
         </div>
         <div id="image_area2">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像２", image: @post.content_image2, image_name: "content_image2", del_id: "content_image2_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像２", image: @post.content_image2, image_name: "content_image2", del_id: "content_image2_del_id"} %>
         </div>
         
         
@@ -247,7 +247,7 @@
             </div>
         </div>
         <div id="image_area3">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像３", image: @post.content_image3, image_name: "content_image3", del_id: "content_image3_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像３", image: @post.content_image3, image_name: "content_image3", del_id: "content_image3_del_id"} %>
         </div>
         
         
@@ -303,7 +303,7 @@
             </div>
         </div>
         <div id="image_area4">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像４", image: @post.content_image4, image_name: "content_image4", del_id: "content_image4_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像４", image: @post.content_image4, image_name: "content_image4", del_id: "content_image4_del_id"} %>
         </div>
         
         
@@ -359,7 +359,7 @@
             </div>
         </div>
         <div id="image_area5">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像５", image: @post.content_image5, image_name: "content_image5", del_id: "content_image5_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像５", image: @post.content_image5, image_name: "content_image5", del_id: "content_image5_del_id"} %>
         </div>
         
         
@@ -415,7 +415,7 @@
             </div>
         </div>
         <div id="image_area6">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像６", image: @post.content_image6, image_name: "content_image6", del_id: "content_image6_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像６", image: @post.content_image6, image_name: "content_image6", del_id: "content_image6_del_id"} %>
         </div>
         
         
@@ -471,7 +471,7 @@
             </div>
         </div>
         <div id="image_area7">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像７", image: @post.content_image7, image_name: "content_image7", del_id: "content_image7_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像７", image: @post.content_image7, image_name: "content_image7", del_id: "content_image7_del_id"} %>
         </div>
         
         
@@ -527,10 +527,10 @@
             </div>
         </div>
         <div id="image_area8">
-            <%= render :partial => "admin_partial/edit_error/image_reflesh", locals:{model_name: "post", name: "添付画像８", image: @post.content_image8, image_name: "content_image8", del_id: "content_image8_del_id"} %>
+            <%= render :partial => "admin_partial/edit/image_reflesh", locals:{model_name: "post", name: "添付画像８", image: @post.content_image8, image_name: "content_image8", del_id: "content_image8_del_id"} %>
         </div>
         
-        <%= render :partial => "admin_partial/edit_button/edit_button", locals:{form: form, path: @path} %>
+        <%= render :partial => "admin_partial/edit/edit_button", locals:{form: form, path: @path} %>
 
     <% end %>
 

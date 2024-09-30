@@ -22,7 +22,7 @@
                         <div class="table_record">
                             <% if elem[0] == "公開" %>
                                 <span id="publish_<%= obj[1][0] %>">
-                                    <%= render :partial => "admin_partial/publish_button/publish_button", locals:{flg: elem[1], path: elem[2], confirm: @confirm} %>
+                                    <%= render :partial => "admin_partial/publish/publish_button", locals:{flg: elem[1], path: elem[2], confirm: @confirm} %>
                                 </span>
                             <% else %>
                                 <span>
