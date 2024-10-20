@@ -19,7 +19,7 @@
             <% @menu.each do |menu| %>
                 <li class="nav_item <% if menu[2].size >=2 %>drop_down<% end %>" onMouseLeave="this.style.color='black';this.style.fontWeight='normal';" onMouseEnter="this.style.color='<%=@partner.main_color%>';this.style.fontWeight='700';">
                     <% if menu[1] == "job" %>
-                        <%= link_to job_index_view_path do %><%= menu[0] %><% end %>
+                        <%= link_to job_list_path do %><%= menu[0] %><% end %>
                     <% else %>
                         <% if menu[2].size == 1 %>
                             <% menu[2].each do |obj| %>
