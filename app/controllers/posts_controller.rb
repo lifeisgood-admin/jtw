@@ -111,7 +111,7 @@ class PostsController < ApplicationController
     @form_create.push({index:"公開設定", column:"disclose_flg", required:true, type:"select", option:[["非公開",0],["公開",1]]})
 
     @form_create.push({group:"【画像】"})
-    @form_create.push({index:"サムネイル", column:"thumbnail", required:false, type:"image", del_id:@thumbnail_del_id = "thumbnail_del_id", tt:["添付が無い場合は、パートナー情報に添付されたサムネイルが表示されます。"]}) #画像はrequiredではなくdel_idの有無で必須か判断している
+    @form_create.push({index:"サムネイル", column:"thumbnail", required:false, type:"image", del_id:@thumbnail_del_id = "thumbnail_del_id", tt:@tt = ["添付が無い場合は、パートナー情報に添付されたサムネイルが表示されます。"]}) #画像はrequiredではなくdel_idの有無で必須か判断している
     @form_create.push({index:"メインビジュアル", column:"main_image", required:true, type:"image", del_id:@main_image_del_id = ""})
 
     @form_create.push({group:"【動画】"})

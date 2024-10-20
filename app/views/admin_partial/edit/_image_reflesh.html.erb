@@ -1,18 +1,18 @@
-<div class="post_row <% if obj[:tt].present? %>tooltip_bottom <% end %>">
+<div class="post_row <% if @tt.present? %>tooltip_bottom <% end %>">
     <div class="post_index col-md-3">
-        <p class="<% if obj[:tt].present? %>w-90<% end %>">
+        <p class="<% if @tt.present? %>w-90<% end %>">
             <b><%=name%><% if del_id.blank? %><span class="text-danger">（必須）</span><% end %></b>
         </p>
-        <% if obj[:tt].present? %>
+        <% if @tt.present? %>
             <span class="question_icon"><i class="far fa-question-circle"></i></span>
         <% end %>
     </div>
     <div class="post_field col-md-9">
         <input type="file" name="<%=model_name%>[<%=image_name%>]" id="<%=model_name%>_<%=image_name%>"><br>
     </div>
-    <% if obj[:tt].present? %>
+    <% if @tt.present? %>
     <div class="tt_description">
-            <%= br_text_code_ok(obj[:tt].to_a[0]) %>
+            <%= br_text_code_ok(@tt.to_a[0]) %>
         </div>
     <% end %>
 </div>
