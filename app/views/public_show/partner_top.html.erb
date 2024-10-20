@@ -132,5 +132,15 @@
                 <% end %>
             </div>
         </div>
+
+        <div class="content_block clearfix">
+            <div class="text_block text-center">
+                <div class="category_name" style="color:<%=@partner.main_color%>;">
+                    SNSでつながる
+                </div>
+            </div>
+            <%= render :partial => "layouts/sns_area", locals:{obj: @partner} %>
+        </div>
+
     </div>
 </div>

@@ -122,7 +122,7 @@
 }
 @media screen and (max-width: 1400px) {
     #header_partner {
-        padding: 1rem 1.5rem;
+        padding: 1rem;
         .gnav_partner {
             display: block;
             .menu_wrap {
@@ -135,6 +135,19 @@
                         .partner_name {
                         }
                     }
+                    .logo_area {
+                        a {
+                            &:hover {
+                            }
+                            .partner_name {
+                            }
+                            img {
+                                width: 80%;
+                            }
+                        }
+                        .title {
+                        }
+                    }    
                     .recruit_site {
                         display: block;
                         border: none;

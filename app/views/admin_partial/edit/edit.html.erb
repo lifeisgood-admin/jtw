@@ -1,0 +1,16 @@
+<div class="admin_container_edit">
+    <h1><%= @form_name %></h1>
+
+    <div id="alert">
+        <% if @alert #postした時はajaxではなく画面遷移が発生するため@alearを引き継ぐ %>
+            <%= render :partial => "admin_partial/edit/error_form", locals:{item: @item} %>
+        <% end %>
+    </div>
+
+    <%= form_with(model: @item, url:{action: @action_name} , local: false, multipart: true)  do |form| %>
+        <% @form_create.each do |obj| %>
+            <%= render :partial => "admin_partial/edit/edit_item/row", locals:{obj: obj} %>
+        <% end %>
+        <%= render :partial => "admin_partial/edit/edit_button", locals:{form: form, path: @path} %>
+    <% end %>
+</div>

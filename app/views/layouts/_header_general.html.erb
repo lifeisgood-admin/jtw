@@ -1,0 +1,34 @@
+<div id="header_partner">
+    <div class="gnav_partner" id="gnav_partner">
+        <input type="checkbox" id="menu_bar">
+        <div class="menu_wrap">
+            <div class="menu">
+                <div class="logo_area">
+                    <%= link_to general_top_path do %>
+                        <img src="<%= asset_path "logo.png" %>" class="logo" alt="">
+                    <% end %>
+                </div>
+            </div>
+            <label for="menu_bar" class="menu-btn">
+                <span></span>
+            </label>
+        </div>
+        <ul id ="links">
+            <li class="nav_item">
+                <%= link_to general_top_path do %>ホーム<% end %>
+            </li>
+            <li class="nav_item">
+                <%= link_to general_top_path do %>ジョイ to ワークスとは<% end %>
+            </li>
+            <li class="nav_item">
+                <%= link_to general_top_path do %>スタッフブログ<% end %>
+            </li>
+            <li class="nav_item">
+                <%= link_to general_top_path do %>お問い合わせ<% end %>
+            </li>
+            <li class="nav_item">
+                <%= link_to general_top_path do %>運営会社<% end %>
+            </li>
+        </ul>
+    </div>
+</div>

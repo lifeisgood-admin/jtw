@@ -1,2 +1,15 @@
-<h1>PublicShow#general_top</h1>
-<p>Find me in app/views/public_show/general_top.html.erb</p>
+<div id="general_top">
+    <div class="main_visual">
+        <div class="image_area">
+            <div class="image">
+                <img src="<%= asset_path "JTW_TOP01.jpg" %>" class="" alt="">
+            </div>
+            <div class="catch_copy">
+                はたらく喜びを<wbr>共に築く<wbr>コミュニティ<br>ジョイ to ワークス
+            </div>
+        </div>
+    </div>
+    <% @search_list.each do |obj| %>
+        <%= render :partial => "public_show/search_template/search_block", locals:{obj: obj} %>
+    <% end %>
+</div>

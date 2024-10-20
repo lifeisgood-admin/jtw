@@ -7,7 +7,7 @@
                 </div>
             <% end %>
             <div class="category_name" style="color:<%=@partner.main_color%>;">
-                <%= category.name %>
+                <%= br_text_code_ok(category.name) %>
             </div>
             <% if category.description.present? %>
                 <div class="description">

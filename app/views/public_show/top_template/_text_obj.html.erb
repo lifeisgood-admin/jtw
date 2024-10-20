@@ -1,14 +1,30 @@
 <div class="content_block clearfix" id="category_<%=category.id.to_s%>">
     <% if obj_position != "only" %>
         <div class="text_block <% if obj_position == "none" %>for_image_none text-center<% elsif obj_position == "right" %>for_image_right col-md-6 float-left<% elsif obj_position == "left" %>for_image_left col-md-6 float-right<% end %>">
-            <%= link_to topic_path(topic_category_id: category.id, topic_id: category.topics.first.id), class:"", style:"" do %>
+            <% if category.content_type != "コンテンツ無し" %>
+                <%= link_to topic_path(topic_category_id: category.id, topic_id: category.topics.first.id), class:"", style:"" do %>
+                    <% if category.subscript.present? %>
+                        <div class="subscript">
+                            <%= category.subscript %>
+                        </div>
+                    <% end %>
+                    <div class="category_name" style="color:<%=partner.main_color%>;">
+                        <%= br_text_code_ok(category.name) %>
+                    </div>
+                    <% if category.description.present? %>
+                        <div class="description">
+                            <%= br_text_code_ok(category.description) %>
+                        </div>
+                    <% end %>
+                <% end %>
+            <% else %>
                 <% if category.subscript.present? %>
                     <div class="subscript">
                         <%= category.subscript %>
                     </div>
                 <% end %>
                 <div class="category_name" style="color:<%=partner.main_color%>;">
-                    <%= category.name %>
+                    <%= br_text_code_ok(category.name) %>
                 </div>
                 <% if category.description.present? %>
                     <div class="description">
@@ -33,17 +49,29 @@
         </div>
     <% end %>
     <% if obj_position != "none" %>
-        <div class="image_block <% if obj_position == "right" %>col-md-6 float-left<% elsif obj_position == "left" %>col-md-6 float-right<% end %>">
-            <% if obj_type == "image" %>
-                <%= link_to topic_path(topic_category_id: category.id, topic_id: category.topics.first.id), class:"", style:"" do %>
-                    <%= image_tag(category.thumbnail.variant( gravity: "center", resize: "900x600^", crop: "900x600+0+0" ).processed, class:'') %>
+        <% if category.content_type != "コンテンツ無し" %>
+            <div class="image_block <% if obj_position == "right" %>col-md-6 float-left<% elsif obj_position == "left" %>col-md-6 float-right<% end %>">
+                <% if obj_type == "image" %>
+                    <%= link_to topic_path(topic_category_id: category.id, topic_id: category.topics.first.id), class:"", style:"" do %>
+                        <%= image_tag(category.thumbnail.variant( gravity: "center", resize: "900x600^", crop: "900x600+0+0" ).processed, class:'') %>
+                    <% end %>
+                <% else %>
+                    <div class="yt-wrapper">
+                        <%= movie_url_trim(category.movie_url) %>
+                    </div>
                 <% end %>
-            <% else %>
-                <div class="yt-wrapper">
-                    <%= movie_url_trim(category.movie_url) %>
-                </div>
-            <% end %>
-        </div>
+            </div>
+        <% else %>
+            <div class="image_block <% if obj_position == "right" %>col-md-6 float-left<% elsif obj_position == "left" %>col-md-6 float-right<% end %>">
+                <% if obj_type == "image" %>
+                    <%= image_tag(category.thumbnail.variant( gravity: "center", resize: "900x600^", crop: "900x600+0+0" ).processed, class:'') %>
+                <% else %>
+                    <div class="yt-wrapper">
+                        <%= movie_url_trim(category.movie_url) %>
+                    </div>
+                <% end %>
+            </div>
+        <% end %>
         <% if obj_position == "only" %>
             <% if category.content_type != "コンテンツ無し" %>
                 <div class="link_area">

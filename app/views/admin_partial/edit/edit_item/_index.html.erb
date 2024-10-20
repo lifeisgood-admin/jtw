@@ -1,0 +1,24 @@
+<p class="<% if obj[:tt].present? %>w-90<% end %>">
+    <b>
+        <% if obj[:type] == "free_item" %>
+            <% if obj[:free_set][0][0] == "text_field" %>
+                <input class="form-control" type="text" value="<%= @item.send(obj[:free_set][0][1]) %>" name="<%= @item.class.name.downcase+"["+obj[:free_set][0][1]+"]" %>" id="<%= @item.class.name.downcase+"_"+obj[:free_set][0][1] %>">
+            <% end %>
+        <% else %>
+            <%= obj[:index] %>
+        <% end %>
+    </b>
+    <% if obj[:required] == true %>
+        <span class="text-danger"><b>（必須）</b></span>
+    <% end %>
+</p>
+
+<% if obj[:ind_desc].present? %>
+    <p class="min-font mb-0">
+        <%= br_text_code_ok(obj[:ind_desc].to_a[0]) %>
+    </p>
+<% end %>
+
+<% if obj[:tt].present? %>
+    <span class="question_icon"><i class="far fa-question-circle"></i></span>
+<% end %>

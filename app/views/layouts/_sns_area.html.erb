@@ -1,0 +1,17 @@
+<div class="snssharer">
+    <% if obj.contact_line.present? %><%= link_to obj.contact_line, target: :_blank, rel: :noopener, class:"", style:"" do %><i style="color: rgb(76 199 100);" class="fab fa-line"></i><% end %><% end %>
+    <% if obj.contact_x.present? %><%= link_to obj.contact_x, target: :_blank, rel: :noopener, class:"", style:"" do %><i style="color: black;" class="fa-brands fa-square-x-twitter"></i><% end %><% end %>
+    <% if obj.contact_fb.present? %><%= link_to obj.contact_fb, target: :_blank, rel: :noopener, class:"", style:"" do %><i style="color: rgb(8 102 255);" class="fab fa-facebook-square"></i><% end %><% end %>
+    <% if obj.contact_linkedin.present? %><%= link_to obj.contact_linkedin, target: :_blank, rel: :noopener, class:"", style:"" do %><i style="color: rgb(12 102 190);" class="fa-brands fa-linkedin"></i><% end %><% end %>
+    <% if obj.contact_insta.present? %><%= link_to obj.contact_insta, target: :_blank, rel: :noopener, class:"", style:"" do %><i class="fa-brands fa-instagram"></i><% end %><% end %>
+    <% if obj.contact_mail.present? %>
+        <%= mail_to obj.contact_mail, target: :_blank, rel: :noopener, class:"", style:"" do %>
+            <i class="fa-solid fa-envelope"></i>
+        <% end %>
+    <% end %>
+    <% if obj.contact_tel.present? %>
+        <%= phone_to obj.contact_tel, target: :_blank, rel: :noopener, class:"", style:"" do %>
+            <i class="fas fa-mobile-alt"></i>
+        <% end %>
+    <% end %>
+</div>

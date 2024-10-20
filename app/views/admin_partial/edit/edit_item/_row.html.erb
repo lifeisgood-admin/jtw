@@ -1,0 +1,21 @@
+<% if obj[:group].present? %>
+    <p class="h5 mt-3"><b><%= obj[:group] %></b></p>
+<% elsif obj[:type] == "image" %>
+    <div id="<%= obj[:column] %>_area" class="image_area" <% if obj[:display].present? %>style="display:none;"<% end %>>
+        <%= render :partial => "admin_partial/edit/image_reflesh", locals:{obj:obj, model_name: @item.class.name.underscore, name: obj[:index], image: @item.send(obj[:column]), image_name: obj[:column], del_id: obj[:del_id]} %>
+    </div>
+<% elsif obj[:index].present? %>
+    <div class="post_row <% if obj[:tt].present? %>tooltip_bottom <% end %><% if obj[:type] == "text_area_movie" %>movie_area <% end %>" <% if obj[:display].present? %>style="display:none;"<% end %>>
+        <div class="post_index col-md-3">
+            <%= render :partial => "admin_partial/edit/edit_item/index", locals:{obj: obj} %>
+        </div>
+        <div class="post_field col-md-9">
+            <%= render :partial => "admin_partial/edit/edit_item/field", locals:{obj:obj, name:@item.class.name.underscore+"["+obj[:column]+"]", id:@item.class.name.underscore+"_"+obj[:column], value:@item.send(obj[:column])} %>
+        </div>
+        <% if obj[:tt].present? %>
+            <div class="tt_description">
+                <%= br_text_code_ok(obj[:tt].to_a[0]) %>
+            </div>
+        <% end %>
+    </div>
+<% end %>

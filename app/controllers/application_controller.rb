@@ -31,6 +31,8 @@ class ApplicationController < ActionController::Base
         item.disclose_flg = (item.disclose_flg-1).abs
         item.save!
 
+        admin_partner_info_create
+
         respond_to do |format|
             format.js
             render "admin_partial/publish/publish"
@@ -95,6 +97,48 @@ class ApplicationController < ActionController::Base
   
     def get_partner
         @partner = Partner.find_by(url: params[:partner_url])
+    end
+
+    def admin_partner_info_create
+        if params[:partner_id]
+            partners = Partner.where(id: params[:partner_id])
+        elsif params[:publish_id]
+            partners = Partner.where(id: params[:publish_id])
+        end
+
+        #公開ボタン用
+        @info_confirm = "【確認】サイト全体が非公開になります。よろしいですか？"
+    
+        setting = []
+        #setting.push([項目名,PC表示順,幅,over_admin,sp_menu])
+        #下記の並び順はスマホでの順番になる
+        setting.push(["企業名",1,15,"","true"])
+        setting.push(["ID",0,3,"",""])
+        setting.push(["公開",2,7,"",""])
+        setting.push(["登録カテゴリー",3,15,"",""])
+        setting.push(["公開コンテンツ",4,10,"",""])
+        setting.push(["管理者",5,7,"",""])
+        setting.push(["ポスト",6,7,"",""])
+        setting.push(["プレビュー",7,7,"",""])
+        setting.push(["編集",8,7,"",""])
+    
+        @info_data = []
+        @info_data.push(setting)
+    
+        partners.each do |item|
+            row = []
+            #row.push([表示内容,表示形式,色,リンク先,ウィンドウ])
+            row.push([item.name,"text","","",""])
+            row.push([item.id,"text","","",""])
+            row.push(["公開",item.disclose_flg,partner_publish_path(publish_id: item.id, info_flg: true)]) #公開は予約対応で、["公開",disclose_flg,path]
+            row.push([item.category.gsub("[", "").gsub("]", "").gsub("\"", ""),"text","","",""])
+            row.push([item.topic_categories.where(disclose_flg: "1").size.to_s + "カテゴリー","btn","btn-outline-primary",topic_category_index_path(partner_id: item.id),""])
+            row.push([item.users.size.to_s + "人","btn","btn-outline-primary",user_index_path(partner_id: item.id),""])
+            row.push([item.posts.where(disclose_flg: "1").size.to_s + "件","btn","btn-outline-primary",post_index_path(partner_id: item.id),""])
+            row.push(["プレビュー","btn","btn-outline-primary",partner_top_path(partner_url: item.url),"blank"])
+            row.push(["編集","btn","btn-outline-primary",partner_edit_path(partner_id: item.id),""])
+            @info_data.push(row)
+        end
     end
 
     def menu_create

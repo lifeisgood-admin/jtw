@@ -103,11 +103,15 @@ Rails.application.routes.draw do
 
     #カテゴリー一覧--------------------------------------------------------------------------------    
     get 'job', to: 'public_show#search', as: :job_search
-    get 'ambassador', to: 'public_show#search', as: :ambassador_search
-    get 'professional', to: 'public_show#search', as: :professional_search
-    get 'education', to: 'public_show#search', as: :education_search
-    get 'worker', to: 'public_show#search', as: :worker_search
-    get 'selection', to: 'public_show#search', as: :selection_search
+    get 'job_partner', to: 'public_show#search', as: :job_partner_search
+    get 'service', to: 'public_show#search', as: :service_search
+    get 'service_partner', to: 'public_show#search', as: :service_partner_search
+    get 'business', to: 'public_show#business_partner', as: :business_search
+    get 'business_partner', to: 'public_show#search', as: :business_partner_search
+    get 'education_partner', to: 'public_show#search', as: :education_partner_search
+    get 'worker_partner', to: 'public_show#search', as: :worker_partner_search
+    get 'professional_partner', to: 'public_show#search', as: :professional_partner_search
+    get 'ambassador_partner', to: 'public_show#search', as: :ambassador_partner_search
 
     scope ':partner_url' do
         get '', to: 'public_show#partner_top', as: :partner_top

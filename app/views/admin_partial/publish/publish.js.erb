@@ -1,5 +1,8 @@
 $('#notice').html("<%= escape_javascript(render :partial => "layouts/admin_flash") %>");
 
-<% if @info_flg.blank? %>
+<% if @info_flg == "true" %>
+    $('#partial_info').html("<%= escape_javascript(render :partial => "admin_partial/index/index", locals:{data: @info_data, info_flg: "true"}) %>");
+<% else %>
+    $('#partial_info').html("<%= escape_javascript(render :partial => "admin_partial/index/index", locals:{data: @info_data, info_flg: "true"}) %>");
     $('#publish_<%= @publish_item.id %>').html("<%= escape_javascript(render :partial => "admin_partial/publish/publish_button", locals:{flg: @publish_item.disclose_flg, path: @publish_path, confirm: @confirm}) %>");
 <% end %>

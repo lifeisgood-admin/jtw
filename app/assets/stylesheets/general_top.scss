@@ -1,0 +1,69 @@
+#general_top {
+    .main_visual {
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 5rem;
+        .image_area {
+            position: relative;
+            width: 100%;
+            .image {
+                display: flex;
+                justify-content: center;
+                img {
+                    height: auto;
+                    width: 100%;
+                    min-width: 1000px;
+                }
+            }
+            .catch_copy {
+                white-space: nowrap;
+                width: 65%;
+                padding: 1rem;
+                background-color: rgba(255, 255, 255, 0.9);
+                box-shadow: 0px 0px 20px 20px rgba(255, 255, 255, 0.9);
+                position: absolute;
+                text-align: center;
+                font-size: 2rem;
+                font-weight: bold;
+                top: 80%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -webkit-transform: translate(-50%, -50%);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    #general_top {
+        .main_visual {
+            margin-bottom: 3rem;
+            .image_area {
+                .image {
+                    img {
+                    }
+                }
+                .catch_copy {
+                    width: 80%;
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }    
+}
+
+@media screen and (max-width: 599px) {
+    #general_top {
+        .main_visual {
+            .image_area {
+                .image {
+                    img {
+                    }
+                }
+                .catch_copy {
+                    width: 90%;
+                }
+           }
+        }
+    }
+}

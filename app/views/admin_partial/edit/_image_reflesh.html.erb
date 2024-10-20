@@ -1,15 +1,25 @@
-<div class="post_row">
+<div class="post_row <% if obj[:tt].present? %>tooltip_bottom <% end %>">
     <div class="post_index col-md-3">
-        <p><b><%=name%><% if del_id.blank? %><span class="text-danger">（必須）</span><% end %></b></p>
+        <p class="<% if obj[:tt].present? %>w-90<% end %>">
+            <b><%=name%><% if del_id.blank? %><span class="text-danger">（必須）</span><% end %></b>
+        </p>
+        <% if obj[:tt].present? %>
+            <span class="question_icon"><i class="far fa-question-circle"></i></span>
+        <% end %>
     </div>
     <div class="post_field col-md-9">
         <input type="file" name="<%=model_name%>[<%=image_name%>]" id="<%=model_name%>_<%=image_name%>"><br>
     </div>
+    <% if obj[:tt].present? %>
+    <div class="tt_description">
+            <%= br_text_code_ok(obj[:tt].to_a[0]) %>
+        </div>
+    <% end %>
 </div>
 <% if image.attached? && !image.id.nil? %>
     <p style="margin:0;">現在登録されている画像<% if del_id.present? %>（削除するものはチェックしてください）<% end %></p>
     <label>
-        <% if del_id.present? %>
+        <% if del_id != "" %>
             <input type="checkbox" value="<%= image.id.to_s %>" name="<%=model_name%>[<%=del_id%>][]">
         <% end %>
         <% if image_name == "main_image" %>

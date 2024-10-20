@@ -1,0 +1,84 @@
+<% if obj[:index].present? %>
+    <div class="index_area">
+        <div class="index">
+            <%= obj[:index] %>
+        </div>
+        <% if obj[:path].present? %>
+            <div class="link">
+                <%= link_to obj[:path], class:"", style:"" do %>
+                    もっと見る
+                <% end %>
+            </div>
+        <% end %>
+    </div>
+<% else %>
+    <div class="search_list">
+        <% if obj[:type] == "job" %>
+            <% obj[:items].each do |obj| %>
+                <%= link_to obj[:path], class:"job_card_wrap", style:"" do %>
+                    <div class="title">
+                        <%= obj[:title] %>
+                    </div>
+                    <div class="label_area">
+                        <% obj[:label].split(",").each do | label | %>
+                            <span class="label"><%= label %></span>
+                        <% end %>
+                    </div>
+                    <div class="job_content">
+                        <%= obj[:main_content].truncate(40) %>
+                    </div>
+                    <div class="footer">
+                        <div class="salary">
+                            <% if obj[:max_income].present? %>
+                                ～<%= obj[:income_style] %>
+                                <% if obj[:max_income].to_i >= 10000 %>
+                                    <span class="income">
+                                        <%= (obj[:max_income].to_i/10000).to_s(:delimited) %>
+                                    </span>万円
+                                <% else %>
+                                    <span class="income">
+                                        <%= obj[:max_income].to_s(:delimited) %>
+                                    </span>円
+                                <% end %>
+                            <% elsif obj[:min_income].present? %>
+                                <%= obj[:income_style] %>
+                                <% if obj[:min_income].to_i >= 10000 %>
+                                    <span class="income">
+                                        <%= (obj[:min_income].to_i/10000).to_s(:delimited) %>
+                                    </span>万円～
+                                <% else %>
+                                    <span class="income">
+                                        <%= obj[:min_income].to_s(:delimited) %>
+                                    </span>円～
+                                <% end %>
+                            <% end %>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        <% else %>
+            <% obj[:items].each do |obj| %>
+                <%= link_to obj[:path], class:"", style:"" do %>
+                    <div class="search_card">
+                        <div class="catch_phrase">
+                            <%= obj[:catch_phrase] %>
+                        </div>
+                        <div class="name">
+                            <%= obj[:name] %>
+                        </div>
+                        <% if obj[:label].present? %>
+                            <div class="label_area">
+                                <% obj[:label].split(",").each do | label | %>
+                                    <span class="label"><%= label %></span>
+                                <% end %>
+                            </div>
+                        <% end %>
+                        <div class="image">
+                            <%= image_tag(obj[:image].variant( gravity: "center", resize: "300x300^", crop: "300x300+0+0" ).processed, class:'') %>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        <% end %>
+    </div>
+<% end %>

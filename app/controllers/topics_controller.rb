@@ -1,6 +1,7 @@
 class TopicsController < ApplicationController
   layout 'for_admin'
   before_action :login_required
+  before_action :admin_partner_info_create, only: [:index, :index_category]
   # before_action :auth_verification
 
   def index_category
@@ -37,7 +38,11 @@ class TopicsController < ApplicationController
       if item.content_type == "求人"
         @row.push([@partner.jobs.where(disclose_flg: "1").size.to_s + "件","btn","btn-outline-primary",job_index_path(partner_id: @partner.id),""])
       else
-        @row.push([item.topics.where(disclose_flg: "1").size.to_s + "件","btn","btn-outline-primary",topic_index_path(partner_id: @partner.id,topic_category_id: item.id),""])
+        if item.content_type != "コンテンツ無し"
+          @row.push([item.topics.where(disclose_flg: "1").size.to_s + "件","btn","btn-outline-primary",topic_index_path(partner_id: @partner.id,topic_category_id: item.id),""])
+        else
+          @row.push(["無し","text","","",""])
+        end
       end
       @row.push(["編集","btn","btn-outline-primary",topic_category_edit_path(partner_id: @partner.id, topic_category_id: item.id),""])
       @row.push(["削除","btn","btn-outline-secondary",topic_category_destroy_path(destroy_id: item.id),"remote_destroy"])
@@ -46,47 +51,154 @@ class TopicsController < ApplicationController
   end
 
   def edit_category
+    @action_name = action_name #同一コントローラー内に二つのeditがあるときのため
     @partner = Partner.find(params[:partner_id])
 
     if request.get? then
       if params[:topic_category_id]
-        @topic_category = TopicCategory.find(params[:topic_category_id])
+        @item = TopicCategory.find(params[:topic_category_id])
         if params[:alert]
           @alert = true
           request.env["HTTP_REFERER"] = topic_category_index_path
         end
       elsif
-        @topic_category = TopicCategory.new
+        @item = TopicCategory.new
       end
     elsif request.post? then
-      @topic_category = TopicCategory.new(topic_category_params)
-      if @topic_category.valid?
-        @topic_category.save!
+      @item = TopicCategory.new(topic_category_params)
+      @alert = true
+      if @item.valid?
+        @item.save!
 
-        redirect_to action: :edit_category, topic_category_id: @topic_category.id, alert: true
+        redirect_to action: :edit_category, topic_category_id: @item.id, alert: true
         return
       else
-        @topic_category.errors.add(:base, '画像を選択していた場合、再度添付してください。')
+        @item.errors.add(:base, '画像を選択していた場合、再度添付してください。')
       end
     elsif request.patch? then
       ActiveStorage::Blob.unattached.find_each(&:purge)
-      @topic_category_new = TopicCategory.new(topic_category_params)
-      @topic_category = TopicCategory.find(params[:topic_category_id])
-      @topic_category_old = TopicCategory.find(params[:topic_category_id])
+      @item_new = TopicCategory.new(topic_category_params)
+      @item = TopicCategory.find(params[:topic_category_id])
+      @item_old = TopicCategory.find(params[:topic_category_id])
 
-      if !@topic_category.update(topic_category_params)
-        @topic_category.errors.add(:base, '画像を選択していた場合、再度添付してください。')
+      if !@item.update(topic_category_params)
+        @item.errors.add(:base, '画像を選択していた場合、再度添付してください。')
         #validationエラー時に少なくとも昔の画像が見えるようにする
-        patch_image_fallback(@topic_category_new.thumbnail, @topic_category_old.thumbnail, @topic_category.thumbnail)
+        patch_image_fallback(@item_new.thumbnail, @item_old.thumbnail, @item.thumbnail)
       end
     end
+
+    @form_name = "コンテンツ編集"
+    #columnのidはダミー、indexのフリーはダミー
+    @form_create = []
+    @form_create.push({index:"パートナー名", column:"partner_id", required:true, type:"hidden_field", display:@partner.name, hidden_value:@partner.id})
+    @form_create.push({index:"公開設定", column:"disclose_flg", required:true, type:"select", option:[["非公開",0],["公開",1]]})
+
+    #optionの3つ目の引数は制御用のclass名
+    @option_create = []
+    if @item.created_at.blank? #新規作成なら
+      if !TopicCategory.where(partner_id: @partner.id).where(content_type: "求人").exists?
+        @option_create.push(["求人","求人","job_content"])
+      end
+      @option_create.push(
+          ["汎用（単一コンテンツ）","汎用（単一コンテンツ）","not_multi_content"],
+          ["汎用（複数コンテンツ）","汎用（複数コンテンツ）","multi_content"],
+          ["コンテンツ無し","コンテンツ無し","not_multi_content"]
+      )
+      @js = ""
+      @js =
+      "<script type='text/javascript'>
+          $('.job_content').click(function(){
+              $('.type_job').fadeIn();
+              $('.type_card').fadeOut();
+              $(\"input:radio[name='topic_category[display_style]']:checked\")[0].checked = false;
+          });
+          $('.not_multi_content').click(function(){
+              $('.type_job').fadeOut();
+              $('.type_card').fadeOut();
+              $(\"input:radio[name='topic_category[display_style]']:checked\")[0].checked = false;
+          });
+          $('.multi_content').click(function(){
+              $('.type_job').fadeOut();
+              $('.type_card').fadeIn();
+              $(\"input:radio[name='topic_category[display_style]']:checked\")[0].checked = false;
+          });
+      </script>"
+      @form_create.push({index:"コンテンツタイプ", column:"content_type", required:true, type:"radio_button",option:@option_create, js:@js})
+    else
+      @form_create.push({index:"コンテンツタイプ", column:"content_type", required:true, type:"hidden_field", display:@item.content_type, hidden_value:@item.content_type})
+    end
+
+    @form_create.push({index:"カテゴリー名", column:"name", required:true, type:"text_area", height:"2"})
+    @form_create.push({index:"カテゴリー名添字", column:"subscript", required:false, type:"text_field"})
+    @form_create.push({index:"説明文", column:"description", required:false, type:"text_area", height:"3"})
+    @form_create.push({index:"掲載順調整", column:"display_order", required:false, type:"text_field"})
+    @text = '全ページ共通のメニューバーに表示する際の名称を入力してください。<br><br>
+             空欄の場合】<br>メニューバーには掲載されません。<br><br>
+             【他カテゴリーと重複する名称の場合】<br>グループ化されてプルダウン形式になります。'
+    @form_create.push({index:"メニューバー表示名", column:"menu_name", required:false, type:"text_field", tt:[@text]})
+
+    #optionの3つ目の引数は制御用のclass名
+    @option_create = []
+    if @item.created_at.blank? #新規作成なら
+      if TopicCategory.where(partner_id: @partner.id, content_type: "求人").empty?
+        @option_create.push(["求人","求人","type_job"])
+      end
+      @option_create.push(["カード","カード","type_card"])
+    else
+      if @item.content_type == "求人"
+        @option_create.push(["求人","求人","type_job"])
+      elsif @item.content_type == "汎用（複数コンテンツ）"
+        @option_create.push(["カード","カード","type_card"])
+      end
+    end
+    #常に使えるoptionを追加
+    @option_create.push(
+      ["文章のみ","文章のみ","no_obj"],
+      ["画像のみ","画像のみ","require_image"],
+      ["文章+画像","文章+画像","require_image"],
+      ["画像+文章","画像+文章","require_image"],
+      ["動画のみ","動画のみ","require_movie"],
+      ["文章+動画","文章+動画","require_movie"],
+      ["動画+文章","動画+文章","require_movie"]
+    )
+    @js = ""
+    @js =
+    "<script type='text/javascript'>
+        $('.require_image').click(function(){
+            $('.image_area').fadeIn();
+            $('.movie_area').fadeOut();
+        });
+        $('.require_movie').click(function(){
+            $('.image_area').fadeOut();
+            $('.movie_area').fadeIn();
+        });
+        $('.no_obj').click(function(){
+            $('.image_area').fadeOut();
+            $('.movie_area').fadeOut();
+        });
+    </script>"
+    @form_create.push({index:"トップページ表示形式", column:"display_style", required:true, type:"radio_button",option:@option_create, js:@js})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+
+    @display = ""
+    if !@item.display_style.present? || !@item.display_style.include?("動画")
+      @display = "none"
+    end
+    @form_create.push({index:"YouTubeURL", column:"movie_url", required:true, type:"text_area_movie", height:"3", ind_desc:[@text], display:@display})
+
+    @display = ""
+    if !@item.display_style.present? || !@item.display_style.include?("画像")
+      @display = "none"
+    end
+    @form_create.push({index:"サムネイル", column:"thumbnail", required:true, type:"image", del_id:@thumbnail_del_id = "", display:@display})
+
+
     respond_to do |format|
-      format.html
+      format.html {
+        render "admin_partial/edit/edit"
+      }
       format.js {
-        @item = @topic_category
-        @alert = true
-        @thumbnail = true
-        @thumbnail_del_id = ""
         render "admin_partial/edit/edit_error"
       }
     end
@@ -100,7 +212,9 @@ class TopicsController < ApplicationController
   def publish_category
     @confirm = ""
     @publish_item = TopicCategory.find(params[:publish_id])
-    @publish_path = topic_category_publish_path(publish_id: @publish_item.id)
+
+    @info_flg = "false"
+    @publish_path = topic_category_publish_path(publish_id: @publish_item.id, info_flg: @info_flg)
 
     publish_item(@confirm, @publish_item, @publish_path)
   end
@@ -144,75 +258,166 @@ class TopicsController < ApplicationController
   end
 
   def edit
+    @action_name = action_name #同一コントローラー内に二つのeditがあるときのため
     @partner = Partner.find(params[:partner_id])
     @topic_category = TopicCategory.find(params[:topic_category_id])
 
     if request.get? then
       if params[:topic_id]
-        @topic = Topic.find(params[:topic_id])
+        @item = Topic.find(params[:topic_id])
         if params[:alert]
           @alert = true
           request.env["HTTP_REFERER"] = topic_index_path
         end
       elsif
-        @topic = Topic.new
+        @item = Topic.new
       end
     elsif request.post? then
-      @topic = Topic.new(topic_params)
-      if @topic.valid?
-        @topic.save!
+      @item = Topic.new(topic_params)
+      @alert = true
+      if @item.valid?
+        @item.save!
 
-        redirect_to action: :edit, topic_id: @topic.id, alert: true
+        redirect_to action: :edit, topic_id: @item.id, alert: true
         return
       else
-        @topic.errors.add(:base, '画像を選択していた場合、再度添付してください。')
+        @item.errors.add(:base, '画像を選択していた場合、再度添付してください。')
       end
     elsif request.patch? then
       ActiveStorage::Blob.unattached.find_each(&:purge)
-      @topic_new = Topic.new(topic_params)
-      @topic = Topic.find(params[:topic_id])
-      @topic_old = Topic.find(params[:topic_id])
+      @item_new = Topic.new(topic_params)
+      @item = Topic.find(params[:topic_id])
+      @item_old = Topic.find(params[:topic_id])
 
       #画像の削除
-      patch_image_delete(@topic.content_image1, params[:topic][:content_image1_del_id])
-      patch_image_delete(@topic.content_image2, params[:topic][:content_image2_del_id])
-      patch_image_delete(@topic.content_image3, params[:topic][:content_image3_del_id])
-      patch_image_delete(@topic.content_image4, params[:topic][:content_image4_del_id])
-      patch_image_delete(@topic.content_image5, params[:topic][:content_image5_del_id])
-      patch_image_delete(@topic.content_image6, params[:topic][:content_image6_del_id])
-      patch_image_delete(@topic.content_image7, params[:topic][:content_image7_del_id])
-      patch_image_delete(@topic.content_image8, params[:topic][:content_image8_del_id])
+      patch_image_delete(@item.content_image1, params[:topic][:content_image1_del_id])
+      patch_image_delete(@item.content_image2, params[:topic][:content_image2_del_id])
+      patch_image_delete(@item.content_image3, params[:topic][:content_image3_del_id])
+      patch_image_delete(@item.content_image4, params[:topic][:content_image4_del_id])
+      patch_image_delete(@item.content_image5, params[:topic][:content_image5_del_id])
+      patch_image_delete(@item.content_image6, params[:topic][:content_image6_del_id])
+      patch_image_delete(@item.content_image7, params[:topic][:content_image7_del_id])
+      patch_image_delete(@item.content_image8, params[:topic][:content_image8_del_id])
 
-      if !@topic.update(topic_params)
-        @topic.errors.add(:base, '画像を選択していた場合、再度添付してください。')
+      if !@item.update(topic_params)
+        @item.errors.add(:base, '画像を選択していた場合、再度添付してください。')
 
         #validationエラー時に少なくとも昔の画像が見えるようにする
-        patch_image_fallback(@topic_new.main_image, @topic_old.main_image, @topic.main_image)
-        patch_image_fallback(@topic_new.content_image1, @topic_old.content_image1, @topic.content_image1)
-        patch_image_fallback(@topic_new.content_image2, @topic_old.content_image2, @topic.content_image2)
-        patch_image_fallback(@topic_new.content_image3, @topic_old.content_image3, @topic.content_image3)
-        patch_image_fallback(@topic_new.content_image4, @topic_old.content_image4, @topic.content_image4)
-        patch_image_fallback(@topic_new.content_image5, @topic_old.content_image5, @topic.content_image5)
-        patch_image_fallback(@topic_new.content_image6, @topic_old.content_image6, @topic.content_image6)
-        patch_image_fallback(@topic_new.content_image7, @topic_old.content_image7, @topic.content_image7)
-        patch_image_fallback(@topic_new.content_image8, @topic_old.content_image8, @topic.content_image8)
+        patch_image_fallback(@item_new.main_image, @item_old.main_image, @item.main_image)
+        patch_image_fallback(@item_new.content_image1, @item_old.content_image1, @item.content_image1)
+        patch_image_fallback(@item_new.content_image2, @item_old.content_image2, @item.content_image2)
+        patch_image_fallback(@item_new.content_image3, @item_old.content_image3, @item.content_image3)
+        patch_image_fallback(@item_new.content_image4, @item_old.content_image4, @item.content_image4)
+        patch_image_fallback(@item_new.content_image5, @item_old.content_image5, @item.content_image5)
+        patch_image_fallback(@item_new.content_image6, @item_old.content_image6, @item.content_image6)
+        patch_image_fallback(@item_new.content_image7, @item_old.content_image7, @item.content_image7)
+        patch_image_fallback(@item_new.content_image8, @item_old.content_image8, @item.content_image8)
       end
     end
 
-    if @topic.id.present?
+    if @item.id.present?
       # プレビュー用のパス
-      @path = topic_path(partner_url: @partner.url, topic_category_id: @topic_category.id, topic_id: @topic.id)
+      @path = topic_path(partner_url: @partner.url, topic_category_id: @topic_category.id, topic_id: @item.id)
     end
 
+    @form_name = "コンテンツ編集"
+    #columnのidはダミー、indexのフリーはダミー
+    @form_create = []
+    @form_create.push({index:"カテゴリー名", column:"topic_category_id", required:true, type:"hidden_field", display:@topic_category.name, hidden_value:@topic_category.id})
+    @form_create.push({index:"公開設定", column:"disclose_flg", required:true, type:"select", option:[["非公開",0],["公開",1]]})
+    @form_create.push({index:"掲載順調整", column:"display_order", required:false, type:"text_field"})
+
+    @form_create.push({group:"【画像】"})
+    @form_create.push({index:"メインビジュアル", column:"main_image", required:true, type:"image", del_id:@main_image_del_id = ""})
+
+    @form_create.push({group:"【動画】"})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"Youtube URL", column:"movie_url", required:false, type:"text_area", height:"6", ind_desc:[@text]})
+
+    @form_create.push({group:"【基本情報】"})
+    @form_create.push({index:"タイトル", column:"title", required:true, type:"text_field"})
+    @form_create.push({index:"説明文", column:"description", required:true, type:"text_area", height:"3"})
+
+    @form_create.push({group:"【コンテンツ設定】"})
+    @form_create.push({index:"段落形式", column:"index_type", required:true, type:"radio_button", option:[["数字","数字"],["QA","QA"],["なし","なし"]]})
+
+    @form_create.push({group:"【コンテンツ１】"})
+    @form_create.push({index:"ラベル", column:"item1_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item1_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item1_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item1_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item1_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像１", column:"content_image1", required:false, type:"image", del_id:"content_image1_del_id"})
+
+    @form_create.push({group:"【コンテンツ２】"})
+    @form_create.push({index:"ラベル", column:"item2_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item2_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item2_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item2_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item2_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像２", column:"content_image2", required:false, type:"image", del_id:"content_image2_del_id"})
+
+    @form_create.push({group:"【コンテンツ３】"})
+    @form_create.push({index:"ラベル", column:"item3_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item3_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item3_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item3_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item3_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像３", column:"content_image3", required:false, type:"image", del_id:"content_image3_del_id"})
+
+    @form_create.push({group:"【コンテンツ４】"})
+    @form_create.push({index:"ラベル", column:"item4_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item4_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item4_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item4_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item4_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像４", column:"content_image4", required:false, type:"image", del_id:"content_image4_del_id"})
+
+    @form_create.push({group:"【コンテンツ５】"})
+    @form_create.push({index:"ラベル", column:"item5_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item5_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item5_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item5_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item5_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像５", column:"content_image5", required:false, type:"image", del_id:"content_image5_del_id"})
+    
+    @form_create.push({group:"【コンテンツ６】"})
+    @form_create.push({index:"ラベル", column:"item6_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item6_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item6_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item6_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item6_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像６", column:"content_image6", required:false, type:"image", del_id:"content_image6_del_id"})
+
+    @form_create.push({group:"【コンテンツ７】"})
+    @form_create.push({index:"ラベル", column:"item7_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item7_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item7_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item7_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item7_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像７", column:"content_image7", required:false, type:"image", del_id:"content_image7_del_id"})
+
+    @form_create.push({group:"【コンテンツ８】"})
+    @form_create.push({index:"ラベル", column:"item8_label", required:false, type:"text_area", height:""})
+    @form_create.push({index:"本文", column:"item8_content", required:false, type:"text_area", height:""})
+    @form_create.push({index:"コンテンツ配置", column:"item8_position", required:false, type:"select", option:[["選択してください",""],["左","left"],["上","top"],["右","right"],["下","bottom"]], tt:["未選択の場合は文章の右側に配置されます。<br>動画と画像が両方存在する場合は、動画が優先されます。"]})
+    @text = '<a href="https://support.google.com/youtube/answer/171780?hl=ja" target="_blank" rel="noopener noreferrer"><span class="min-font"><b>取得方法はこちらから</b></span></a><br><span class="min-font">1.説明ページの1~4を実行<br></span><span class="min-font">2.こちらの欄に取得したHTMLコードを入力して保存<br></span>'
+    @form_create.push({index:"動画（YouTubeURL）", column:"item8_movie_url", required:false, type:"text_area", height:"3", ind_desc:[@text]})
+    @form_create.push({index:"画像説明（altタグ）", column:"item8_image_alt", required:false, type:"text_field", tt:["検索エンジンに画像の内容を説明するために入力します。"]})
+    @form_create.push({index:"添付画像８", column:"content_image8", required:false, type:"image", del_id:"content_image8_del_id"})
+
     respond_to do |format|
-      format.html
+      format.html {
+        render "admin_partial/edit/edit"
+      }
       format.js {
-        @item = @topic
-        @model_name = "topic"
-        @alert = true
-        @rich_content = true
-        @main_image = true
-        @main_image_del_id = ""
         render "admin_partial/edit/edit_error"
       }
     end
@@ -226,7 +431,9 @@ class TopicsController < ApplicationController
   def publish
     @confirm = ""
     @publish_item = Topic.find(params[:publish_id])
-    @publish_path = topic_publish_path(publish_id: @publish_item.id)
+    
+    @info_flg = "false"
+    @publish_path = topic_publish_path(publish_id: @publish_item.id, info_flg: @info_flg)
 
     publish_item(@confirm, @publish_item, @publish_path)
   end

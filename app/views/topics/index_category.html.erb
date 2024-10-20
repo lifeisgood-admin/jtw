@@ -1,3 +1,7 @@
+<div id="partial_info">
+    <%= render :partial => "admin_partial/index/index", locals:{data: @info_data, info_flg: "true"} %>
+</div>
+
 <div class="admin_info_area">
     <%= link_to '<< パートナー一覧に戻る' , partner_index_path, class: "back_link" %>
     <div class="label_area">
@@ -10,4 +14,4 @@
     </div>
 </div>
 
-<%= render :partial => "admin_partial/index/index" %>
+<%= render :partial => "admin_partial/index/index", locals:{data: @data, info_flg: "false"} %>

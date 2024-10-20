@@ -4,20 +4,281 @@ class PublicShowController < ApplicationController
   before_action :menu_create, only: [:partner_top, :partner_info, :partner_privacy_policy, :topic_list, :topic, :job_list, :job, :post]
 
   def general_top
+    @search_list = []
+
+    @items = []
+    @elem = ""
+    @elem = Job.includes(:partner).where(partner: {disclose_flg: "1"}).where(jobs: {disclose_flg: "1"}).limit(4)
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({title:item.title,
+                      label:item.label,
+                      main_content:item.main_content,
+                      income_style:item.income_style,
+                      max_income:item.max_income,
+                      min_income:item.min_income,
+                      path:job_path(partner_url: item.partner.url, job_id: item.id)})
+      end
+      @search_list.push({index:"求人を探す", path:job_search_path })
+      @search_list.push({type:"job" ,items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Post.includes(:partner).where(partner: {disclose_flg: "1"}).where(posts: {disclose_flg: "1"}).where( "posts.category like ?", '%福利厚生サービス紹介%').limit(4)    
+    if @elem.present?
+      @elem.each do |item|
+        if item.thumbnail.attached?
+          @items.push({name:item.title, catch_phrase:item.partner.name, image:item.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+        else
+          @items.push({name:item.title, catch_phrase:item.partner.name, image:item.partner.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+        end
+      end    
+      @search_list.push({index:"福利厚生サービスを探す", path:service_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Post.includes(:partner).where(partner: {disclose_flg: "1"}).where(posts: {disclose_flg: "1"}).where( "posts.category like ?", '%事業パートナー募集%').limit(4)    
+    if @elem.present?
+      @elem.each do |item|
+        if item.thumbnail.attached?
+          @items.push({name:item.title, catch_phrase:item.partner.name, image:item.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+        else
+          @items.push({name:item.title, catch_phrase:item.partner.name, image:item.partner.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+        end
+      end    
+      @search_list.push({index:"事業パートナーの募集を探す", path:business_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%求人掲載%').limit(4)    
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+      end    
+      @search_list.push({index:"求人企業を探す", path:job_partner_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%福利厚生サービス提供%').limit(4)
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+      end
+      @search_list.push({index:"福利厚生サービス提供企業を探す", path:service_partner_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%事業パートナー募集%').limit(4)
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+      end
+      @search_list.push({index:"事業パートナー募集企業を探す", path:business_partner_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%教育機関%').limit(4)
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+      end
+      @search_list.push({index:"教育機関を探す", path:education_partner_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%助っ人%').limit(4)
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+      end
+      @search_list.push({index:"助っ人を探す", path:worker_partner_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%仕事の専門家%').limit(4)
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+      end
+      @search_list.push({index:"仕事の専門家を探す", path:professional_partner_search_path})
+      @search_list.push({items:@items})
+    end
+
+    @items = []
+    @elem = ""
+    @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%アンバサダー%').limit(4)
+    if @elem.present?
+      @elem.each do |item|
+        @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+      end
+      @search_list.push({index:"アンバサダーを探す", path:ambassador_partner_search_path})
+      @search_list.push({items:@items})
+    end
+
+    render layout: 'for_general'
   end
+
   def about
+    render layout: 'for_general'
   end
+
   def blog
+    render layout: 'for_general'
   end
 
   def search
-    if request.fullpath == "job"
-    elsif request.fullpath == "ambassador"
-    elsif request.fullpath == "professional"
-    elsif request.fullpath == "education"
-    elsif request.fullpath == "worker"
-    elsif request.fullpath == "selection"
+    if request.fullpath == "/job"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Job.includes(:partner).where(partner: {disclose_flg: "1"}).where(jobs: {disclose_flg: "1"})
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({title:item.title,
+                        label:item.label,
+                        main_content:item.main_content,
+                        income_style:item.income_style,
+                        max_income:item.max_income,
+                        min_income:item.min_income,
+                        path:job_path(partner_url: item.partner.url, job_id: item.id)})
+        end
+        @search_list.push({index:"求人を探す" })
+        @search_list.push({type:"job" ,items:@items})
+      end
+    elsif request.fullpath == "/job_partner"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%求人掲載%')
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+        end    
+        @search_list.push({index:"求人企業を探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/service"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Post.includes(:partner).where(partner: {disclose_flg: "1"}).where(posts: {disclose_flg: "1"}).where( "posts.category like ?", '%福利厚生サービス紹介%')
+      if @elem.present?
+        @elem.each do |item|
+          if item.thumbnail.attached?
+            @items.push({name:item.title, catch_phrase:item.partner.name, image:item.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+          else
+            @items.push({name:item.title, catch_phrase:item.partner.name, image:item.partner.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+          end
+        end    
+        @search_list.push({index:"福利厚生サービスを探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/service_partner"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%福利厚生サービス提供%')
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+        end
+        @search_list.push({index:"福利厚生サービス提供企業を探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/business"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Post.includes(:partner).where(partner: {disclose_flg: "1"}).where(posts: {disclose_flg: "1"}).where( "posts.category like ?", '%事業パートナー募集%')
+      if @elem.present?
+        @elem.each do |item|
+          if item.thumbnail.attached?
+            @items.push({name:item.title, catch_phrase:item.partner.name, image:item.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+          else
+            @items.push({name:item.title, catch_phrase:item.partner.name, image:item.partner.thumbnail, path:post_path(partner_url: item.partner.url, post_id: item.id)})
+          end
+        end    
+        @search_list.push({index:"事業パートナーの募集を探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/business_partner"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%事業パートナー募集%')
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+        end
+        @search_list.push({index:"事業パートナー募集企業を探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/education"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%教育機関%')
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+        end
+        @search_list.push({index:"教育機関を探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/worker"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%助っ人%')
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+        end
+        @search_list.push({index:"助っ人を探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/professional"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%仕事の専門家%')
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+        end
+        @search_list.push({index:"仕事の専門家を探す"})
+        @search_list.push({items:@items})
+      end
+    elsif request.fullpath == "/ambassador"
+      @search_list = []
+      @items = []
+      @elem = ""
+      @elem = Partner.where(disclose_flg: 1).where( "category like ?", '%アンバサダー%')
+      if @elem.present?
+        @elem.each do |item|
+          @items.push({name:item.name, catch_phrase:item.catch_phrase, label:item.label, image:item.thumbnail, path:partner_top_path(partner_url: item.url)})
+        end
+        @search_list.push({index:"アンバサダーを探す"})
+        @search_list.push({items:@items})
+      end
     end
+
+    render layout: 'for_general'
   end
 
   def partner_top
@@ -154,18 +415,12 @@ class PublicShowController < ApplicationController
   private
 
   def disclose_check(partner, category, obj)
-    if current_user
-      if !(current_user.partner_id == partner.id || current_user.partner_id.blank?)
-        raise Forbidden
-      end
-    elsif partner.disclose_flg == 0
-      raise ActiveRecord::RecordNotFound
-    elsif category.present?
-      if category.disclose_flg == 0
+    if current_user.blank? || (current_user.present? && !(current_user.partner_id == partner.id || current_user.admin_flg?))
+      if partner.disclose_flg == 0
         raise ActiveRecord::RecordNotFound
-      end
-    elsif obj.present?
-      if obj.disclose_flg == 0
+      elsif category.present? && category.disclose_flg == 0
+        raise ActiveRecord::RecordNotFound
+      elsif obj.present? && obj.disclose_flg == 0
         raise ActiveRecord::RecordNotFound
       end
     end

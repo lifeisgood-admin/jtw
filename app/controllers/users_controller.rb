@@ -30,33 +30,46 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @action_name = action_name #同一コントローラー内に二つのeditがあるときのため
     @partner = Partner.find(params[:partner_id])
     if request.get? then
       if params[:user_id]
-        @user = User.find(params[:user_id])
+        @item = User.find(params[:user_id])
         if params[:alert]
           @alert = true
           request.env["HTTP_REFERER"] = @referer
         end
       elsif
-        @user = User.new
+        @item = User.new
       end
     elsif request.post? then
-      @user = User.new(user_params)
-      if @user.valid?
-        @user.save!
-        redirect_to action: :edit, user_id: @user.id, alert: true
+      @item = User.new(user_params)
+      @alert = true
+      if @item.valid?
+        @item.save!
+        redirect_to action: :edit, user_id: @item.id, alert: true
         return
       end
     elsif request.patch? then
-      @user = User.find(params[:user_id])
-      @user.update(user_params)
+      @item = User.find(params[:user_id])
+      @item.update(user_params)
     end
+
+    @form_name = "管理者編集"
+    #columnのidはダミー、indexのフリーはダミー
+    @form_create = []
+    @form_create.push({index:"本部権限", column:"admin_flg", required:false, type:"check_box", option:[["あり",0]]})
+    @form_create.push({index:"パートナー名", column:"partner_id", required:true, type:"hidden_field", display:@partner.name, hidden_value:@partner.id})
+    @form_create.push({index:"名前", column:"name", required:true, type:"text_field"})
+    @form_create.push({index:"メールアドレス", column:"mail", required:true, type:"text_field"})
+    @form_create.push({index:"パスワード", column:"password", required:true, type:"password"})
+    @form_create.push({index:"パスワード", column:"password_confirmation", required:true, type:"password"})
+
     respond_to do |format|
-      format.html
+      format.html {
+        render "admin_partial/edit/edit"
+      }
       format.js {
-        @item = @user
-        @alert = true
         render "admin_partial/edit/edit_error"
       }
     end

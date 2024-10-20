@@ -2,6 +2,7 @@ class Post < ApplicationRecord
     belongs_to :partner
 
     has_one_attached :main_image, dependent: :destroy
+    has_one_attached :thumbnail, dependent: :destroy
     has_one_attached :content_image1, dependent: :destroy
     has_one_attached :content_image2, dependent: :destroy
     has_one_attached :content_image3, dependent: :destroy
@@ -19,6 +20,12 @@ class Post < ApplicationRecord
         elsif !images?(main_image)
             errors.add(:main_image, 'メインビジュアルとして添付できるのは、jpg、gif、png形式のみです。')
             main_image.purge
+        end
+        if thumbnail.attached?
+            if !images?(thumbnail)
+                errors.add(:thumbnail, 'サムネイルとして添付できるのは、jpg、gif、png形式のみです。')
+                thumbnail.purge
+            end
         end
         errors.add(:category, '登録カテゴリーを選択してください。') if category.blank?
         errors.add(:title, 'タイトルを入力してください。') if title.blank?

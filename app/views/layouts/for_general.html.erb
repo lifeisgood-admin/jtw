@@ -11,8 +11,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <%= csrf_meta_tags %>
         <%= csp_meta_tag %>
-        
-        <script src="https://kit.fontawesome.com/6918a7ada9.js" crossorigin="anonymous"></script>
+
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
         <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
@@ -22,9 +21,9 @@
     </head>
 
     <body>
-        <%= render :partial => "layouts/header_partner" %>
+        <%= render :partial => "layouts/header_general" %>
 
-        <div style="<% if @lp.blank? %>padding-top: 100px;<% end %>">
+        <div style="padding-top: 100px;">
             <%= yield %>
         </div>
         

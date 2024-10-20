@@ -178,11 +178,13 @@
     flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     .post_index {
+        padding: 15px;
         display: flex;
         display: -ms-flexbox;
         flex-wrap: wrap;
         -ms-flex-wrap: wrap;
         align-items: center;
+        align-content: center;
         text-align: left;
         -ms-flex-align: center;
         font-size: 1rem;
@@ -200,7 +202,7 @@
     .post_field {
         font-size: 1rem;
         background-color: #F7F7F7;
-        padding: .5rem;
+        padding: 15px;
         border-top: 0.5px white solid;
         border-bottom: 0.5px white solid;
         label {

@@ -1,0 +1,102 @@
+<% if obj[:type] == "hidden_field" %>
+    <input value="<%= obj[:hidden_value] %>" autocomplete="off" type="hidden" name="<%= name %>" id="<%= id %>">
+    <%= obj[:display] %>
+
+<% elsif obj[:type] == "text_field" %>
+    <input class="form-control" type="text" value="<%= value %>" name="<%= name %>" id="<%= id %>">
+
+<% elsif obj[:type] == "text_area" || obj[:type] == "text_area_movie" %>
+    <textarea rows="<%= obj[:height] %>" class="form-control" name="<%= name %>" id="<%= id %>"><%= value %></textarea>
+
+<% elsif obj[:type] == "select" %>
+    <select class="form-control" name="<%= name %>" id="<%= id %>">
+        <% obj[:option].each do |set| %>
+            <option <% if value == set[1] %>selected="selected"<% end %> value="<%= set[1] %>"><%= set[0] %></option>
+        <% end %>
+    </select>
+
+<% elsif obj[:type] == "check_box" %>
+    <% obj[:option].each do |set| %>
+        <label><input class="" type="checkbox" value="<%= set[1] %>" <% if @item.send(obj[:column]).try(:include?,set[1]) %>checked="checked"<% end %> name="<%= name %>[]" id="<%= id %>_<%= set[1] %>"><%= set[0] %></label>
+    <% end %>
+
+<% elsif obj[:type] == "file_multi" %>
+    <input multiple="multiple" type="file" name="<%= name %>[]" id="<%= id %>">
+
+<% elsif obj[:type] == "text_field_multi" %>
+    <% obj[:column_set].each do |set| %>
+        <% if set[0].present? %><p class="float-left mb-0 mt-2"><%= set[0] %></p><% end %>
+        <input class="float-left form-control w-20 mr-1 ml-1" type="text" value="<%= @item.send(set[1]) %>" name="<%= @item.class.name.downcase+"["+set[1]+"]" %>" id="<%= @item.class.name.downcase+"_"+set[1] %>">
+        <% if set[2].present? %><p class="float-left mb-0 mt-2"><%= set[2] %></p><% end %>
+    <% end %>
+    
+<% elsif obj[:type] == "free_item" %>
+    <% if obj[:free_set][1][0] == "text_area" %>
+        <textarea rows="2" class="form-control" name="<%= @item.class.name.downcase+"["+obj[:free_set][1][1]+"]" %>" id="<%= @item.class.name.downcase+"_"+obj[:free_set][1][1] %>"><%= @item.send(obj[:free_set][1][1]) %></textarea>
+    <% end %>
+
+<% elsif obj[:type] == "radio_button" %>
+    <% @another_flg = "" %>
+    <% obj[:option].each do |set| %>
+        <label class="mr-4<% if set[2].present? %> <%= set[2] %><% end %>"><input class="mr-1" onclick="func_<%= obj[:column] %>_2(this.checked)" type="radio" value="<%= set[1] %>" <% if value == set[1] %>checked="checked"<% end %> name="<%= name %>" id="<%= id %>_<%= set[1] %>"><%= set[0] %></label>
+        <% if value == set[1] || value.blank? then @another_flg = false end %>
+    <% end %>
+    <% if obj[:js].present? %>
+        <%= obj[:js].html_safe %>
+    <% end %>
+    <% if obj[:another].present? %>
+        <br>
+        <% if @another_flg == false %>
+            <label><input type="radio" class="mr-1" name="<%= name %>" value="on" onclick="func_<%= obj[:column] %>_1('another_<%= obj[:column] %>',this.checked);">その他</label>
+            <input type="text" class="form-control" name="<%= name %>" id="another_<%= obj[:column] %>"  value disabled >
+        <% else %>
+            <label><input type="radio" class="mr-1" name="<%= name %>" value="on" checked="checked" onclick="func_<%= obj[:column] %>_1('another_<%= obj[:column] %>',this.checked);">その他</label>
+            <input type="text" class="form-control" name="<%= name %>" id="another_<%= obj[:column] %>" value="<%= value %>">
+        <% end %>
+
+        <script type="text/javascript">
+            function func_<%= obj[:column] %>_1( textid, ischecked ) {
+                if( ischecked == true ) {
+                    // チェックが入っていたら有効化
+                    document.getElementById(textid).disabled = false;
+                }
+                else {
+                    // チェックが入っていなかったら無効化
+                    document.getElementById(textid).disabled = true;
+                }
+            }
+            function func_<%= obj[:column] %>_2( ischecked ) {
+                if( ischecked == true ) {
+                    //var textForm = document.getElementById("another_<%= obj[:column] %>");
+                    //textForm.value = '';
+                    // チェックが入っていたら無効化
+                    document.getElementById("another_<%= obj[:column] %>").disabled = true;
+                }
+            }
+        </script>
+    <% end %>
+
+<% elsif obj[:type] == "color_field" %>
+    <input value="<%= value %>" type="color" name="<%= name %>" id="<%= id %>">
+
+<% elsif obj[:type] == "password" %>
+    <input class="form-control" type="password" name="<%= name %>" id="<%= id %>">
+
+<% elsif obj[:type] == "exceptional" %>
+    <% if @item.class.name == "Job" %>
+        <% if obj[:index] == "募集年齢" %>
+            <% obj[:column_set].each do |set| %>
+                <% if set[0].present? %><p class="float-left mb-0 mt-2"><%= set[0] %></p><% end %>
+                <input class="float-left form-control w-20 mr-1 ml-1" type="text" value="<%= @item.send(set[1]) %>" name="<%= @item.class.name.downcase+"["+set[1]+"]" %>" id="<%= @item.class.name.downcase+"_"+set[1] %>">
+                <% if set[2].present? %><p class="float-left mb-0 mt-2"><%= set[2] %></p><% end %>
+            <% end %>
+            <p class="mb-0 pt-3" style="clear:both;">年齢制限理由（制限を設ける場合は必須）</p>
+            <select class="form-control min-font" name="<%= @item.class.name.downcase+"["+obj[:option_column]+"]" %>" id="<%= @item.class.name.downcase+"_"+obj[:option_column] %>">
+                <% obj[:option].each do |set| %>
+                    <option <% if @item.send(obj[:option_column]) == set[1] %>selected="selected"<% end %> value="<%= set[1] %>"><%= set[0] %></option>
+                <% end %>
+            </select>
+        <% end %>
+    <% end %>
+
+<% end %>

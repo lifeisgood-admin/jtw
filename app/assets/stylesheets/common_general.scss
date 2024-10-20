@@ -121,28 +121,44 @@ a {
 
 /* SNSシェアボタン------------------------- */
 .snssharer {
-    margin: 10px 0 20px 0;
+    margin: auto;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    .sns_element {
-        font-size: 2.5rem;
-        margin: 0 .7rem;
-        .facebook {
-            color: #3c5a99;
+    align-items: center;
+    font-size: 5rem;
+    a {
+        display: flex;
+        margin: .5rem;
+        &:hover {
+            text-decoration: none;
+            opacity: 80%;
         }
-        .twitter {
-            color: #28aae1;
+        i {
+            height: auto;
         }
-        .line {
-            color: #01ba01;
-        }    
+        .fa-instagram {
+            padding: 0.3rem 0.4rem;
+            font-size: 3.9rem;
+            background: linear-gradient(45deg, rgba(254,212,117,1) 0%,rgba(229,61,93,1) 50%,rgba(194,49,134,1) 70%,rgba(156,56,187,1) 100%);
+            color: white;
+            border-radius: 5px;
+        }
+        .fa-envelope {
+            padding: 0.3rem 0.4rem;
+            font-size: 3.9rem;
+            background: orange;
+            color: white;
+            border-radius: 5px;
+        }
+        .fa-mobile-alt {
+            padding: 0.3rem 1.2rem;
+            font-size: 3.9rem;
+            background: #4e7eb1;
+            color: white;
+            border-radius: 5px;            
+        }
     }
-}
-.snssharer:after {
-    content: "";
-    clear: both;
-    display: block;
-    height: 0;
 }
 
 
